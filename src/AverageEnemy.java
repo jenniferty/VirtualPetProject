@@ -28,25 +28,4 @@ public class AverageEnemy extends Enemy {
         this.satietyWin = -4;
         initialise();
     }
-
-    /**
-     * Overrides the abstract method. Opens the averageenemy.txt file and adds
-     * each line as an element of an ArrayList.
-     *
-     * @return an ArrayList that is used to initialise an AverageEnemy object.
-     */
-    /*@Override
-    protected ArrayList<String> getList() {
-        ArrayList<String> enemyList = new ArrayList<>();
-        try ( Scanner s = new Scanner(new FileReader("averageenemy.txt"))) {
-            while (s.hasNext()) {
-                enemyList.add(s.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("File can't be read.");
-        }
-        return enemyList;
-    }*/
 }

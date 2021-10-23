@@ -93,23 +93,6 @@ public abstract class Enemy {
         pet.update(); //updates the petstats.txt file with the new modifications
     }
 
-    /**
-     * Method to be inherited by the child classes.Obtains a random element of
-     * the ArrayList parameter and splits it into a String array. Returns a
-     * String array that is used to initialise an Enemy object.
-     *
-     * @param level
-     * @param list takes in an ArrayList that contains a String representations
-     * of an Enemy object
-     * @return a String array that is used to populate an Enemy object
-     */
-    /*protected String[] getEnemy(ArrayList<String> list) {
-        String enemy;
-        int random = (int) (Math.random() * list.size());
-        enemy = list.get(random);
-        String[] stats = enemy.split("[|]");
-        return stats;
-    }*/
     protected ResultSet getEnemyData(int level) {
         EnemyData data = new EnemyData();
         ResultSet rs = null;

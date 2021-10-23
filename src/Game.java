@@ -208,7 +208,7 @@ public class Game {
                     getPet().eat(Food.BITTERPOWDER); //ends loop and exits method
                     break;
                 case 7:
-                    eat = false; //eends loop and exits method
+                    eat = false; //ends loop and exits method
                     break;
             }
         }
@@ -223,31 +223,6 @@ public class Game {
      * @param message
      */
     public void endGame(String message) {
-        /*List<String> records = new LinkedList<>();
-        try ( Scanner s = new Scanner(new FileReader("petrecords.txt"))) {
-            while (s.hasNext()) { //Adds every nine lines of the petrecords.txt file to a node of a LinkedList
-                records.add(s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine() + "\n" + s.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("File can't be read.");
-        }
-        while (records.size() > 9) { //Removes the earliest element of the List so that it never exceeds ten records. A record consists of six lines.
-            records.remove(0);
-        }
-        records.add(getPet().toString() + "\n" + message); //adds message to record
-        PrintWriter pw;
-        try { //Updates the petrecords.txt file.
-            pw = new PrintWriter(new FileOutputStream("petrecords.txt"));
-            for (int i = 0; i < records.size(); i++) {
-                pw.println(records.get(i));
-            }
-            pw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        }*/
-
         PetData data = new PetData();
 
         try {
@@ -269,7 +244,6 @@ public class Game {
         System.out.println(getPet().toString());
         pet.setGameOver(true);
         pet.update();
-        //getPet().deletePet();
         try { //A delay to allow users to read the console.
             Thread.sleep(2000);
         } catch (InterruptedException e) {

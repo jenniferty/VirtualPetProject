@@ -112,33 +112,6 @@ public class VirtualPetMain {
      * console. Prints a message if file is empty.
      */
     static void viewRecord() {
-        /*try { //Checks if file is empty. If empty, prints a message.
-            FileReader fr = new FileReader("petrecords.txt");
-            BufferedReader br = new BufferedReader(fr);
-            String line = br.readLine();
-            if (line == null) {
-                System.out.println("No records exists. Befriend your pet and complete your own journey today!");
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Cannot read file.");
-        }
-        try { //Prints contents of the file to the console if not empty.
-            FileReader fr = new FileReader("petrecords.txt");
-            BufferedReader br = new BufferedReader(fr);
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Cannot read file.");
-        }*/
-
         ResultSet rs = null;
         PetData record = new PetData();
         try {

@@ -75,26 +75,6 @@ public class Pet {
      * continue the game with the same pet.
      */
     public final void update() {
-        /*PrintWriter pw;
-        try {
-            pw = new PrintWriter(new FileOutputStream("petstats.txt"));
-            pw.println(this.getName());
-            pw.println(this.getLevel());
-            pw.println(this.getHpMax());
-            pw.println(this.getHp());
-            pw.println(this.getHappy());
-            pw.println(this.getExp());
-            pw.println(this.getSatiety());
-            pw.println(this.getCordycepsCount());
-            pw.println(this.getFoodCount());
-            pw.println(this.getBattleCount());
-            pw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println("File can't be read.");
-        }*/
-
         PetData current = new PetData();
         current.createCurrentPetTable(this);
     }
@@ -103,29 +83,6 @@ public class Pet {
      * Reads and populates members of the Pet object from the petstats.txt file.
      */
     public final void initialise() {
-        /*List<String> petValues = new ArrayList<>();
-
-        try ( Scanner s = new Scanner(new FileReader("petstats.txt"))) {
-            while (s.hasNext()) {
-                petValues.add(s.nextLine()); //each element of the ArrayList contains a value used to initialise Pet object
-            }
-            setName(petValues.get(0));
-            setLevel(Integer.parseInt(petValues.get(1)));
-            setHp(Integer.parseInt(petValues.get(3)));
-            setHappy(Integer.parseInt(petValues.get(4)));
-            setExp(Integer.parseInt(petValues.get(5)));
-            setSatiety(Integer.parseInt(petValues.get(6)));
-            setCordycepsCount(Integer.parseInt(petValues.get(7)));
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Cannot read file.");
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("No save file exists."); //prints this message if file is empty or is not the correct length
-        } catch (NumberFormatException e) {
-            System.out.println("Corrupted number field.");
-        }*/
-
         PetData current = new PetData();
         ResultSet rs = null;
 
@@ -156,93 +113,54 @@ public class Pet {
      * @return a Boolean |true if file is valid|false if file is invalid
      */
     public Boolean canContinue() {
-        /*try { //try statement to check if file is empty
-            FileReader file = new FileReader("petstats.txt");
-            BufferedReader br = new BufferedReader(file);
-            String e = br.readLine();
-            br.close();
-            if (e == null) {
-                return false;
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Cannot read file.");
-        }
 
-        List<String> petValues = new ArrayList<>();
-
-        try ( Scanner s = new Scanner(new FileReader("petstats.txt"))) { //try statement to validate values in file if not empty
-            while (s.hasNext()) {
-                petValues.add(s.nextLine()); //each element of the ArrayList contains a value used to initialise Pet object
-            }
-            String cName = petValues.get(0);
-            int cLevel = Integer.parseInt(petValues.get(1));
-            int cHp = Integer.parseInt(petValues.get(3));
-            int cHappy = Integer.parseInt(petValues.get(4));
-            int cExp = Integer.parseInt(petValues.get(5));
-            int cSatiety = Integer.parseInt(petValues.get(6));
-            int cordyceps = Integer.parseInt(petValues.get(7));
-            //series of if statements to check if values are out of bounds
-            if (cName.length() > 8 || cName.length() < 1) {
-                return false;
-            }
-            if (cLevel < 1 || cLevel > this.getLevelMax() - 1) {
-                return false;
-            }
-            if (cHp < 1 || cHp > (100 + ((cLevel - 1) * 10))) {
-                return false;
-            }
-            if (cHappy < 0 || cHappy > this.getHappyMax()) {
-                return false;
-            }
-            if (cExp < 0 || cExp >= this.getExpMax()) {
-                return false;
-            }
-            if (cSatiety < 0 || cSatiety > this.getSatietyMax()) {
-                return false;
-            }
-            if (cordyceps < 0 || cordyceps > 2) {
-                return false;
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Cannot read file.");
-        } catch (NumberFormatException e) {
-            return false; //returns false if integers cannot be parsed
-        } catch (Exception e) {
-            System.out.println(e); //catches this exception if values are out of bounds
-        }*/
         PetData data = new PetData();
         ResultSet rs = null;
         Boolean canContinue = null;
+        Boolean valid = null;
         try {
             rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
             if (rs.next()) {
                 rs = rs;
             }
+            valid = validateCurrentPet(rs);
+            if(!valid){
+                return true;
+            }
             canContinue = rs.getBoolean("GAMEOVER");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return canContinue;
+        return canContinue; //true if gameover false if can continue with pet
     }
-
-    /**
-     * Method used to empty petstats.txt when game ends(not exited). Prevents
-     * users from using Pets that have reached an ending eg. death.
-     */
-    public final void deletePet() {
-        PrintWriter pw;
-        try {
-            pw = new PrintWriter(new FileOutputStream("petstats.txt"));
-            pw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("File cannot be read.");
+    
+    public Boolean validateCurrentPet(ResultSet rs){
+        try{
+        if (rs.getString("NAME").length() > 8 || rs.getString("NAME").length() < 1) {
+                return false;
+            }
+            if (rs.getInt("LEVEL") < 1 || rs.getInt("LEVEL") > this.getLevelMax() - 1) {
+                return false;
+            }
+            if (rs.getInt("HP") < 1 || rs.getInt("HP") > (100 + ((rs.getInt("LEVEL") - 1) * 10))) {
+                return false;
+            }
+            if (rs.getInt("HAPPY") < 0 || rs.getInt("HAPPY") > this.getHappyMax()) {
+                return false;
+            }
+            if (rs.getInt("EXP") < 0 || rs.getInt("EXP") >= this.getExpMax()) {
+                return false;
+            }
+            if (rs.getInt("SATIETY") < 0 || rs.getInt("SATIETY") > this.getSatietyMax()) {
+                return false;
+            }
+            if (rs.getInt("CORDYCEPS") < 0 || rs.getInt("CORDYCEPS") > 2) {
+                return false;
+            }}
+        catch(SQLException ex){
+            System.out.println(ex.getMessage());
         }
+        return true;
     }
 
     /**
