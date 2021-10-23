@@ -34,7 +34,7 @@ public class EnemyData {
         EnemyData weak = new EnemyData();
         EnemyData average = new EnemyData();
         EnemyData strong = new EnemyData();
-
+        
         try {
             weak.checkExistedTable("WEAKENEMY");
             weak.statement.addBatch("CREATE  TABLE WEAKENEMY  (ENEMYID INT, NAME VARCHAR(20), MIN_DAMAGE INT, MAX_DAMAGE INT, EXP INT, MESSAGE VARCHAR(200))");
@@ -45,11 +45,10 @@ public class EnemyData {
                     + "(5, 'Giant Viper', 10, 15, 10, 'I hate snakes.')");
             weak.statement.executeBatch();
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println(ex.getNextException());
+            System.out.println("check"+ex.getMessage());
         }
         weak.closeConnection();
-
+        
         try {
             average.checkExistedTable("AVERAGEENEMY");
             average.statement.addBatch("CREATE  TABLE AVERAGEENEMY  (ENEMYID  INT,   NAME   VARCHAR(20),   MIN_DAMAGE   INT,   MAX_DAMAGE   INT,   EXP   INT,   MESSAGE   VARCHAR(200))");
@@ -63,10 +62,9 @@ public class EnemyData {
             average.statement.executeBatch();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            System.out.println(ex.getNextException());
         }
         average.closeConnection();
-
+        
         try {
             strong.checkExistedTable("STRONGENEMY");
             strong.statement.addBatch("CREATE  TABLE STRONGENEMY  (ENEMYID  INT,   NAME   VARCHAR(20),   MIN_DAMAGE   INT,   MAX_DAMAGE   INT,   EXP   INT,   MESSAGE   VARCHAR(200),   LEGEND   BOOLEAN)");
@@ -82,46 +80,10 @@ public class EnemyData {
             strong.statement.executeBatch();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            System.out.println(ex.getNextException());
         }
         strong.closeConnection();
     }
 
-    public ResultSet getEnemyData(int level) {
-        ResultSet rs = null;
-
-        switch (level) { //creates new Enemy object depending on level member of Pet object
-            case 1:
-            case 2:
-                    try {
-                rs = this.statement.executeQuery("SELECT * FROM WEAKENEMY ORDER BY RANDOM() OFFSET 0 ROWS FETCH NEXT 1 ROW ONLY");
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-            break;
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                    try {
-                rs = this.statement.executeQuery("SELECT * FROM AVERAGEENEMY ORDER BY RANDOM() OFFSET 0 ROWS FETCH NEXT 1 ROW ONLY");
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-            break;
-            case 7:
-            case 8:
-            case 9:
-                    try {
-                rs = this.statement.executeQuery("SELECT * FROM STRONGENEMY ORDER BY RANDOM() OFFSET 0 ROWS FETCH NEXT 1 ROW ONLY");
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-            break;
-        }
-        return rs;
-
-    }
     /**
      * From tutorial 8 solutions.
      *
@@ -136,10 +98,10 @@ public class EnemyData {
 
             while (rs.next()) {
                 String table_name = rs.getString("TABLE_NAME");
-                System.out.println(table_name);
+                //System.out.println(table_name);
                 if (table_name.equalsIgnoreCase(name)) {
                     statement.executeUpdate("Drop table " + name);
-                    System.out.println("Table " + name + " has been deleted.");
+                    //System.out.println("Table " + name + " has been deleted.");
                     break;
                 }
             }
