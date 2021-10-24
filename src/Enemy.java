@@ -94,7 +94,7 @@ public abstract class Enemy {
     }
 
     protected ResultSet getEnemyData(int level) {
-        EnemyData data = new EnemyData();
+        Data data = new Data();
         ResultSet rs = null;
         switch (level) {
             case 1:

@@ -26,6 +26,7 @@ public class Game {
     public Enemy enemy;
     private Boolean gameState = true; //true by default
     private String message;
+    Data data;
 
     /**
      * Constructor for Game object. Takes in a Pet object.
@@ -223,8 +224,6 @@ public class Game {
      * @param message
      */
     public void endGame(String message) {
-        PetData data = new PetData();
-
         try {
             data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + "'" + pet.getName()
                     + "' ," + pet.getLevel() + "," + pet.getHpMax() + "," + pet.getHp() + ","

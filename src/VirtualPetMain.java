@@ -24,6 +24,8 @@ public class VirtualPetMain {
     public static Pet pet;
 
     public static void main(String[] args) {
+        Data data = new Data();
+        data.createDatabase();
         while (true) { //loops code until user uses the quit command
             try { //title screen
                 FileReader fr = new FileReader("title.txt");
@@ -57,6 +59,18 @@ public class VirtualPetMain {
                         throw new Exception("Please input a valid character (n, c, q or r)");
                     }
                     if (input.equalsIgnoreCase("c")) { //statement to prevent further play with an invalid Pet object
+                        ResultSet rs = null;
+                        try {
+                            rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
+                            if (rs.next()) {
+                                rs = rs;
+                            }
+                            if (rs == null) {
+                                throw new Exception("Please create a new pet.");
+                            }
+                        } catch (SQLException ex) {
+                            System.out.println(ex.getMessage());
+                        }
                         pet = new Pet();
                         Boolean isValid = pet.canContinue();
                         if (isValid) { //cannot exit try statement if Pet object is not valid
@@ -112,11 +126,11 @@ public class VirtualPetMain {
      * console. Prints a message if file is empty.
      */
     static void viewRecord() {
+        Data data = new Data();
         ResultSet rs = null;
-        PetData record = new PetData();
         try {
-            record.statement.setMaxRows(10);
-            rs = record.statement.executeQuery("SELECT * FROM PETRECORD");
+            data.statement.setMaxRows(10);
+            rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
             int count = 0;
             while (rs.next()) {
                 count++;
@@ -124,7 +138,7 @@ public class VirtualPetMain {
             if (count == 0) {
                 System.out.println("No records exists. Befriend your pet and complete your own journey today!");
             }
-            rs = record.statement.executeQuery("SELECT * FROM PETRECORD");
+            rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
             while (rs.next()) {
                 System.out.println("Name: " + rs.getString("NAME") + "\n"
                         + "Level: " + rs.getInt("LEVEL") + "\n"
@@ -139,6 +153,6 @@ public class VirtualPetMain {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        record.closeConnection();
+        data.closeConnection();
     }
 }

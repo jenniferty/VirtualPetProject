@@ -75,23 +75,22 @@ public class Pet {
      * continue the game with the same pet.
      */
     public final void update() {
-        PetData current = new PetData();
-        current.createCurrentPetTable(this);
+        Data data = new Data();
+        data.updateCurrentPet(this);
     }
 
     /**
      * Reads and populates members of the Pet object from the petstats.txt file.
      */
     public final void initialise() {
-        PetData current = new PetData();
         ResultSet rs = null;
+        Data data = new Data();
 
         try {
-            rs = current.statement.executeQuery("SELECT * FROM CURRENTPET");
+            rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
             if (rs.next()) {
                 rs = rs;
             }
-            
             setName(rs.getString("NAME"));
             setLevel(rs.getInt("LEVEL"));
             setHp(rs.getInt("HP"));
@@ -102,6 +101,7 @@ public class Pet {
             setBattleCount(rs.getInt("BATTLE"));
             setFoodCount(rs.getInt("FOOD"));
             setGameOver(false);
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -114,7 +114,7 @@ public class Pet {
      */
     public Boolean canContinue() {
 
-        PetData data = new PetData();
+        Data data = new Data();
         ResultSet rs = null;
         Boolean canContinue = null;
         Boolean valid = null;
@@ -124,7 +124,7 @@ public class Pet {
                 rs = rs;
             }
             valid = validateCurrentPet(rs);
-            if(!valid){
+            if (!valid) {
                 return true;
             }
             canContinue = rs.getBoolean("GAMEOVER");
@@ -133,10 +133,10 @@ public class Pet {
         }
         return canContinue; //true if gameover false if can continue with pet
     }
-    
-    public Boolean validateCurrentPet(ResultSet rs){
-        try{
-        if (rs.getString("NAME").length() > 8 || rs.getString("NAME").length() < 1) {
+
+    public Boolean validateCurrentPet(ResultSet rs) {
+        try {
+            if (rs.getString("NAME").length() > 8 || rs.getString("NAME").length() < 1) {
                 return false;
             }
             if (rs.getInt("LEVEL") < 1 || rs.getInt("LEVEL") > this.getLevelMax() - 1) {
@@ -156,8 +156,8 @@ public class Pet {
             }
             if (rs.getInt("CORDYCEPS") < 0 || rs.getInt("CORDYCEPS") > 2) {
                 return false;
-            }}
-        catch(SQLException ex){
+            }
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
         return true;
