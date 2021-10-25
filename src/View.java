@@ -31,7 +31,7 @@ import javax.swing.JTextPane;
  */
 public class View extends JFrame implements Observer {
 
-    public CardLayout card =new CardLayout();
+    public CardLayout card = new CardLayout();
     public JPanel pagePanel;
     public JPanel mainMenuPanel, gameMenuPanel, newGamePanel, recordsMenuPanel, battleMenuPanel, foodMenuPanel, statsMenuPanel;
     private JLabel petName = new JLabel("Enter your pet's name (8 char):");
@@ -47,8 +47,11 @@ public class View extends JFrame implements Observer {
     private JButton foodButton = new JButton("Food");
     private JButton eatButton = new JButton("Eat");
     private JButton backButton = new JButton("Back");
+    private JButton backButton2 = new JButton("Back");
     private JButton viewStatsButton = new JButton("Stats");
     private JButton mainMenuButton = new JButton("Main Menu");
+    private JButton mainMenuButton2 = new JButton("Main Menu");
+    private JButton mainMenuButton3 = new JButton("Main Menu");
     private JLabel foodLabel = new JLabel("Food:");
     private String[] food = new String[6];
     private JComboBox foodBox = new JComboBox(food);
@@ -57,7 +60,6 @@ public class View extends JFrame implements Observer {
     public View() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(630, 500);
-        //this.card = new CardLayout();
         this.pagePanel = new JPanel(card);
         this.mainMenuPanel = mainMenu();
         this.newGamePanel = newGame();
@@ -74,21 +76,14 @@ public class View extends JFrame implements Observer {
         this.pagePanel.add(foodMenuPanel, "food");
         this.pagePanel.add(statsMenuPanel, "stats");
         this.add(pagePanel);
-        this.add(newGamePanel);
-        this.add(recordsMenuPanel);
-        this.add(gameMenuPanel);
-        this.add(battleMenuPanel);
-        this.add(foodMenuPanel);
-        this.add(statsMenuPanel);
-        this.add(mainMenuPanel);
         this.setVisible(true);
+        this.card.show(pagePanel, "main");
     }
-    
-    public JPanel mainMenu(){
+
+    public JPanel mainMenu() {
         JPanel main = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
-        JPanel button = new JPanel();
         String message = this.titleScreen();
         this.image = new ImageIcon(new ImageIcon("title.png").getImage().getScaledInstance(600, 350, Image.SCALE_DEFAULT));
         output.insertIcon(image);
@@ -96,13 +91,10 @@ public class View extends JFrame implements Observer {
         outputPanel.add(output);
         outputPanel.setSize(600, 350);
         main.add(outputPanel, BorderLayout.NORTH);
-        button.add(newGameButton);
-        button.add(continueButton);
-        button.add(viewRecordsButton);
-        button.add(quitButton);
-        main.add(button, BorderLayout.SOUTH);
-        outputPanel.setVisible(true);
-
+        main.add(newGameButton);
+        main.add(continueButton);
+        main.add(viewRecordsButton);
+        main.add(quitButton);
         return main;
     }
 
@@ -110,76 +102,62 @@ public class View extends JFrame implements Observer {
         JPanel newgame = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
+        outputPanel.setSize(600, 350);
+        output.setText("");
+        output.setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(output);
+        newgame.add(outputPanel, BorderLayout.NORTH);
         newgame.add(petName);
         newgame.add(nameInput);
         newgame.add(nameButton);
         newgame.add(mainMenuButton);
-        outputPanel.setSize(600, 350);
-        //this.getContentPane().removeAll();
-        newgame.setVisible(true);
-        outputPanel.setVisible(true);
-        //newgame.add(newGamePanel, BorderLayout.SOUTH);
-        newgame.add(outputPanel, BorderLayout.NORTH);
-        newgame.setVisible(true);
-        
         return newgame;
     }
 
     public JPanel gameMenu() {
-        
         JPanel start = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
+        outputPanel.setSize(600, 350);
+        output.setText("");
+        output.setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(output);
+        start.add(outputPanel, BorderLayout.NORTH);
         start.add(battleButton);
         start.add(foodButton);
         start.add(viewStatsButton);
-        start.add(mainMenuButton);
-        outputPanel.setSize(600, 350);
-        //this.getContentPane().removeAll();
-        start.setVisible(true);
-        outputPanel.setVisible(true);
-        //start.add(gameMenuPanel, BorderLayout.SOUTH);
-        start.add(outputPanel, BorderLayout.NORTH);
-        start.setVisible(true);
-        
+        start.add(mainMenuButton2);
         return start;
     }
-    
+
     public JPanel recordsMenu() {
         JPanel records = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
-        records.add(mainMenuButton);
         outputPanel.setSize(600, 350);
-        //this.getContentPane().removeAll();
-        outputPanel.setVisible(true);
-        //records.add(statsMenuPanel, BorderLayout.SOUTH);
+        output.setText("");
+        output.setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(output);
         records.add(outputPanel, BorderLayout.NORTH);
-        records.setVisible(true);
-        
+        records.add(mainMenuButton3);
         return records;
     }
 
     public JPanel battleMenu() {
-        
         JPanel battle = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
+        outputPanel.setSize(600, 350);
+        output.setText("");
+        output.setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(output);
+        battle.add(outputPanel, BorderLayout.NORTH);
         battle.add(fightButton);
         battle.add(runButton);
-        outputPanel.setSize(600, 350);
-        //this.getContentPane().removeAll();
-        battle.setVisible(true);
-        outputPanel.setVisible(true);
-        //battle.add(gameMenuPanel, BorderLayout.SOUTH);
-        battle.add(outputPanel, BorderLayout.NORTH);
-        battle.setVisible(true);
-        
         return battle;
     }
 
     public JPanel foodMenu() {
-        
         JPanel foodPanel = new JPanel();
         JPanel outputPanel = new JPanel();
         JTextPane output = new JTextPane();
@@ -199,7 +177,7 @@ public class View extends JFrame implements Observer {
         foodBox = new JComboBox(food);
         foodPanel.add(foodBox);
         foodPanel.add(eatButton);
-        foodPanel.setVisible(true);       
+        foodPanel.add(backButton2);
         return foodPanel;
     }
 
@@ -214,11 +192,10 @@ public class View extends JFrame implements Observer {
         outputPanel.setVisible(true);
         stats.add(outputPanel, BorderLayout.NORTH);
         stats.add(backButton);
-        //stats.setVisible(true);        
         return stats;
     }
-    
-    public void addActionListener(ActionListener listener){
+
+    public void addActionListener(ActionListener listener) {
         this.newGameButton.addActionListener(listener);
         this.continueButton.addActionListener(listener);
         this.viewRecordsButton.addActionListener(listener);
@@ -228,10 +205,13 @@ public class View extends JFrame implements Observer {
         this.foodButton.addActionListener(listener);
         this.viewStatsButton.addActionListener(listener);
         this.mainMenuButton.addActionListener(listener);
+        this.mainMenuButton2.addActionListener(listener);
+        this.mainMenuButton3.addActionListener(listener);
         this.fightButton.addActionListener(listener);
         this.runButton.addActionListener(listener);
         this.eatButton.addActionListener(listener);
         this.backButton.addActionListener(listener);
+        this.backButton2.addActionListener(listener);
     }
 
     public String titleScreen() {
@@ -243,7 +223,7 @@ public class View extends JFrame implements Observer {
             while ((line = inputStream.readLine()) != null) {
                 build.append(line);
                 build.append("\n");
-            };
+            }
             inputStream.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");

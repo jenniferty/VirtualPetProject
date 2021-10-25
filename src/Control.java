@@ -31,10 +31,11 @@ public class Control implements ActionListener {
                 break;
             case "Continue":
                 break;
-            case "Pet Records":
+            case "Records":
                 this.view.card.show(this.view.pagePanel, "record");
                 break;
             case "Quit":
+                System.exit(0);
                 break;
             case "OK":
                 break;
