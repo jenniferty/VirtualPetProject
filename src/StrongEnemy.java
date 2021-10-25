@@ -59,34 +59,26 @@ public class StrongEnemy extends Enemy {
      * @param pet Pet object to modify.
      */
     //@Override
-    protected void battle(Pet pet) {
+    protected String battle(Pet pet) {
+        StringBuilder build = new StringBuilder();
         int hpLoss = (int) ((Math.random() * (getUpper_hp() - getLower_hp()) + getLower_hp()));
-        pet.updateHp(pet.getHp() - hpLoss);
+        build.append(pet.updateHp(pet.getHp() - hpLoss)+"\n");
         if (pet.getHp() == 0) {
-            System.out.println(pet.getName() + " was defeated by " + getName() + ".");
+            build.append(pet.getName() + " was defeated by " + getName() + ".\n");
         } else {
-            System.out.println(pet.getName() + " has defeated " + getName() + ".");
-            System.out.println(this.getMessage());
+            build.append(pet.getName() + " has defeated " + getName() + ".\n");
+            build.append(this.getMessage()+"\n");
             if (this.getIsLegend()) { //new code added
                 pet.setLegendCount(pet.getLegendCount() + 1);
-                System.out.println("It was a legendary battle.");
+                build.append("It was a legendary battle.\n");
             }
-            try { //A delay to allow users to read the console.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                System.out.println("Can't sleep");
-            }
-            pet.updateExp(this.getExp_value());
-            pet.updateHappy(pet.getHappy() + this.getHappyWin());
-            pet.updateSatiety(pet.getSatiety() + this.getSatietyWin());
+            build.append(pet.updateExp(this.getExp_value()) + "\n");
+            build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()) + "\n");
+            build.append(pet.updateSatiety(pet.getSatiety() + this.getSatietyWin()) + "\n");
             pet.setBattleCount(pet.getBattleCount() + 1);
-            try { //A delay to allow users to read the console.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                System.out.println("Can't sleep");
-            }
         }
         pet.update();
+        return build.toString();
     }
 
     /**

@@ -67,30 +67,22 @@ public abstract class Enemy {
      *
      * @param pet the parameter that gets modified
      */
-    protected void battle(Pet pet) {
+    protected String battle(Pet pet) {
+        StringBuilder build = new StringBuilder();
         int hpLoss = (int) ((Math.random() * (getUpper_hp() - getLower_hp()) + getLower_hp())); //randomizes the modification of the hp variable in the Pet class
-        pet.updateHp(pet.getHp() - hpLoss);
+        build.append(pet.updateHp(pet.getHp() - hpLoss) + "\n");
         if (pet.getHp() == 0) {
-            System.out.println(pet.getName() + " was defeated by " + getName() + ".");
+            build.append(pet.getName() + " was defeated by " + getName() + ".\n");
         } else {
-            System.out.println(pet.getName() + " has defeated " + getName() + ".");
-            System.out.println(this.getMessage());
-            try { //A delay to allow users to read the console.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                System.out.println("Can't sleep");
-            }
-            pet.updateExp(this.getExp_value());
-            pet.updateHappy(pet.getHappy() + this.getHappyWin());
-            pet.updateSatiety(pet.getSatiety() + this.getSatietyWin());
+            build.append(pet.getName() + " has defeated " + getName() + ".\n");
+            build.append(this.getMessage());
+            build.append(pet.updateExp(this.getExp_value()) + "\n");
+            build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()) + "\n");
+            build.append(pet.updateSatiety(pet.getSatiety() + this.getSatietyWin()) + "\n");
             pet.setBattleCount(pet.getBattleCount() + 1);
-            try { //A delay to allow users to read the console.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                System.out.println("Can't sleep");
-            }
         }
         pet.update(); //updates the petstats.txt file with the new modifications
+        return build.toString();
     }
 
     protected ResultSet getEnemyData(int level) {
@@ -101,8 +93,8 @@ public abstract class Enemy {
             case 2:
                     try {
                 rs = data.statement.executeQuery("SELECT * FROM WEAKENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
-                if(rs.next()){
-                    rs=rs;
+                if (rs.next()) {
+                    rs = rs;
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -114,8 +106,8 @@ public abstract class Enemy {
             case 6:
                     try {
                 rs = data.statement.executeQuery("SELECT * FROM AVERAGEENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
-                if(rs.next()){
-                    rs=rs;
+                if (rs.next()) {
+                    rs = rs;
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -126,8 +118,8 @@ public abstract class Enemy {
             case 9:
                     try {
                 rs = data.statement.executeQuery("SELECT * FROM STRONGENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
-                if(rs.next()){
-                    rs=rs;
+                if (rs.next()) {
+                    rs = rs;
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());

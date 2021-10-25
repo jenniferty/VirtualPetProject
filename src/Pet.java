@@ -39,6 +39,7 @@ public class Pet {
     private int battleCount;
     private int legendCount;
     private Boolean gameOver;
+    private String message;
 
     /**
      * Constructor used to create a new default Pet object.
@@ -125,9 +126,9 @@ public class Pet {
             }
             valid = validateCurrentPet(rs);
             if (!valid) {
-                return true;
+                return false;
             }
-            canContinue = rs.getBoolean("GAMEOVER");
+            canContinue = !rs.getBoolean("GAMEOVER");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -169,29 +170,63 @@ public class Pet {
      *
      * @param food
      */
-    public void eat(Food food) {
+    public String eat(Food food) {
 
         /**
          * Code so that the pet can't eat if it is full unless the food does not
          * increase satiety.
          */
+        StringBuilder build = new StringBuilder();
         if (this.getSatiety() < this.getSatietyMax() || (this.getSatiety() == this.getSatietyMax() && food.getSatietyChange() == 0)) {
-            System.out.println(this.getName() + " ate " + food + ".");
-            updateHp(this.getHp() + food.getHpChange());
+            build.append(this.getName() + " ate " + food + ".\n");
+            build.append(updateHp(this.getHp() + food.getHpChange()));
             if (this.getHp() > 0) { //game will end if hp is 0. This prevents further changes
-                updateExp(this.getExp() + food.getExpChange());
-                updateLevel((this.getExp() / 100) + 1);
-                updateSatiety(this.getSatiety() + food.getSatietyChange());
-                updateHappy(this.getHappy() + food.getHappyChange());
+                build.append(updateExp(this.getExp() + food.getExpChange()));
+                build.append(updateLevel((this.getExp() / 100) + 1));
+                build.append(updateSatiety(this.getSatiety() + food.getSatietyChange()));
+                build.append(updateHappy(this.getHappy() + food.getHappyChange()));
                 setFoodCount(this.foodCount + 1);
                 if (food.equals(Food.CORDYCEPS)) {
                     setCordycepsCount(this.getCordycepsCount() + 1);
                 }
+                if (this.getCordycepsCount() >= 3) {
+                    setMessage("\"... must... get... higher...\" " + this.getName() + " has died by eating cordyceps. What a way to go.");
+                    //endGame(getMessage());
+                    build.append(getMessage() + "\n");
+                }
+                if (this.getHp() == 0) {
+                    setMessage("The Beginner's Guide to Identifying Mushrooms doesn't help those who can't see. " + this.getName() + " has died by eating a false morel. Unlucky.");
+                    //endGame(getMessage());
+                    build.append(getMessage() + "\n");
+                }
             }
             update();
         } else { //prints messsage when satiety is full and food chosen increases satiety.
-            System.out.println(this.getName() + " is full!");
+            build.append(this.getName() + " is full!");
         }
+        return build.toString();
+    }
+
+    public String endGame(String message) {
+        Data data = new Data();
+        StringBuilder build = new StringBuilder();
+        try {
+            data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + "'" + this.getName()
+                    + "' ," + this.getLevel() + "," + this.getHpMax() + "," + this.getHp() + ","
+                    + this.getHappy() + "," + this.getExp() + "," + this.getSatiety() + ","
+                    + this.getFoodCount() + "," + this.getBattleCount() + "," + this.getLegendCount() + ",'"
+                    + message + "')");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        build.append(message + "\n");
+
+        build.append("Final stats:\n");
+        build.append(this.toString() + "\n");
+        this.setGameOver(true);
+        this.update();
+        build.append("Try again?");
+        return build.toString();
     }
 
     /**
@@ -262,10 +297,11 @@ public class Pet {
      *
      * @param level value to check
      */
-    public void isLevelChange(int level) {
+    public String isLevelChange(int level) {
         if (level > this.level) {//prints message when level changes
-            System.out.println(this.getName() + " is now level " + level + "!");
+            return this.getName() + " is now level " + level + "!\n";
         }
+        return "";
     }
 
     /**
@@ -274,9 +310,10 @@ public class Pet {
      *
      * @param level
      */
-    public void updateLevel(int level) {
-        isLevelChange(level);
+    public String updateLevel(int level) {
+        String str = isLevelChange(level);
         setLevel(level);
+        return str;
     }
 
     /**
@@ -313,12 +350,13 @@ public class Pet {
      *
      * @param hp value to campare
      */
-    public void isHpChange(int hp) {
+    public String isHpChange(int hp) {
         if ((hp - this.getHp()) > 0) { //Compare current and new values, prints a message if true
-            System.out.println(this.getName() + " has recovered " + (hp - this.hp) + " HP.");
+            return this.getName() + " has recovered " + (hp - this.hp) + " HP.\n";
         } else if ((hp - this.hp) < 0) {
-            System.out.println(this.getName() + " has lost " + (this.hp - hp) + " HP.");
+            return this.getName() + " has lost " + (this.hp - hp) + " HP.\n";
         }
+        return "";
     }
 
     /**
@@ -328,14 +366,15 @@ public class Pet {
      *
      * @param hp new value
      */
-    public void updateHp(int hp) {
+    public String updateHp(int hp) {
         if (hp > this.getHpMax()) { //prevents values from going out of bounds.
             hp = this.getHpMax();
         } else if (hp < 0) {
             hp = 0;
         }
-        isHpChange(hp);
+        String str = isHpChange(hp);
         setHp(hp);
+        return str;
     }
 
     /**
@@ -365,17 +404,18 @@ public class Pet {
      *
      * @param happy value to check
      */
-    public void isHappyChange(int happy) {
+    public String isHappyChange(int happy) {
 
         if ((happy - this.getHappy()) > 0) { //Compares current and new values, then prints a message
-            System.out.println(this.getName() + " has regained " + (happy - this.happy) + " happiness.");
-            isHappy();
+            return this.getName() + " has regained " + (happy - this.happy) + " happiness.\n";
+            //isHappy();
         } else if ((happy - this.happy) < 0) {
-            System.out.println(this.getName() + " has lost " + (this.happy - happy) + " happiness.");
-            isHappy();
+            return this.getName() + " has lost " + (this.happy - happy) + " happiness.\n";
+            //isHappy();
         } else if ((happy - this.happy) == 0) {
-            isHappy();
+            //isHappy();
         }
+        return "";
     }
 
     /**
@@ -385,32 +425,35 @@ public class Pet {
      *
      * @param happy new value
      */
-    public void updateHappy(int happy) {
+    public String updateHappy(int happy) {
         if (happy > this.getHappyMax()) { //Prevents parameters from going out of bounds.
             happy = this.getHappyMax();
         } else if (happy < 0) {
             happy = 0;
         }
-        isHappyChange(happy);
+        String str = isHappyChange(happy);
         setHappy(happy);
+        str = str + isHappy() + "\n";
+        return str;
     }
 
     /**
      * Method to implicitly update the user on the pet's current happiness after
      * a change. Prints out key phrases.
      */
-    public void isHappy() {
+    public String isHappy() {
         if (this.getHappy() == 0) {
-            System.out.println(this.getName() + " has sunk into the depths of despair.");
+            return this.getName() + " has sunk into the depths of despair.";
         } else if (this.getHappy() < 25) {
-            System.out.println(this.getName() + " is in a bad mood.");
+            return this.getName() + " is in a bad mood.";
         } else if (this.getHappy() >= 25 && this.getHappy() < 50) {
-            System.out.println(this.getName() + " is feeling down.");
+            return this.getName() + " is feeling down.";
         } else if (this.getHappy() > 80 && this.getHappy() < 95) {
-            System.out.println(this.getName() + " is super happy.");
+            return this.getName() + " is super happy.";
         } else if (this.getHappy() >= 95) {
-            System.out.println(this.getName() + " is over the moon.");
+            return this.getName() + " is over the moon.";
         }
+        return "";
     }
 
     /**
@@ -440,15 +483,16 @@ public class Pet {
      *
      * @param exp new value
      */
-    public void updateExp(int exp) {
+    public String updateExp(int exp) {
         if (exp > this.getExpMax()) { //prevents value from going over the maximum
             exp = this.getExpMax();
         }
         int expChange = exp - this.getExp();
         if (expChange > 0) { //prints message only if there is a change
-            System.out.println(this.getName() + " has gained " + expChange + " EXP points!");
+            setExp(exp);
+            return this.getName() + " has gained " + expChange + " EXP points!\n";
         }
-        setExp(exp);
+        return "";
     }
 
     /**
@@ -478,14 +522,15 @@ public class Pet {
      *
      * @param satiety
      */
-    public void isSatietyChange(int satiety) {
+    public String isSatietyChange(int satiety) {
         if ((satiety - this.getSatiety()) > 0) { //Compares current and new values, then prints a message
-            System.out.println(this.getName() + " has gained " + (satiety - this.satiety) + " points in satiety.");
-            isHungry();
+            return this.getName() + " has gained " + (satiety - this.satiety) + " points in satiety.\n";
+            //isHungry();
         } else if ((satiety - this.satiety) < 0) {
-            System.out.println(this.getName() + " has lost " + (this.satiety - satiety) + " points in satiety.");
-            isHungry();
+            return this.getName() + " has lost " + (this.satiety - satiety) + " points in satiety.\n";
+            //isHungry();
         }
+        return "";
     }
 
     /**
@@ -495,34 +540,37 @@ public class Pet {
      *
      * @param satiety new value
      */
-    public void updateSatiety(int satiety) {
+    public String updateSatiety(int satiety) {
         if (satiety > this.getSatietyMax()) { //Prevents the parameters from going out of bounds.
             satiety = this.getSatietyMax();
         } else if (satiety < 0) {
             satiety = 0;
         }
-        isSatietyChange(satiety);
+        String str = isSatietyChange(satiety);
         setSatiety(satiety);
+        str = str + isHungry() + "\n";
+        return str;
     }
 
     /**
      * Method to implicitly update the user on the pet's current satiety after a
      * change. Prints out key phrases.
      */
-    public void isHungry() {
+    public String isHungry() {
         if (this.getSatiety() == 0) {
-            System.out.println(this.getName() + " is begging for food. \"Please feed me.\"");
+            return this.getName() + " is begging for food. \"Please feed me.\"";
         } else if (this.getSatiety() < 25) {
-            System.out.println(this.getName() + " hasn't eaten in a while. You should feed them.");
+            return this.getName() + " hasn't eaten in a while. You should feed them.";
         } else if (this.getSatiety() >= 25 && this.getSatiety() < 50) {
-            System.out.println(this.getName() + " is hungry.");
+            return this.getName() + " is hungry.";
         } else if (this.getSatiety() >= 50 && this.getSatiety() < 75) {
-            System.out.println(this.getName() + " is a bit peckish.");
+            return this.getName() + " is a bit peckish.";
         } else if (this.getSatiety() >= 75 && this.getSatiety() < 100) {
-            System.out.println(this.getName() + " wants a snack.");
+            return this.getName() + " wants a snack.";
         } else if (this.getSatiety() == this.getSatietyMax()) {
-            System.out.println(this.getName() + " has a round belly.");
+            return this.getName() + " has a round belly.";
         }
+        return "";
     }
 
     /**
@@ -616,5 +664,16 @@ public class Pet {
      */
     public void setGameOver(Boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

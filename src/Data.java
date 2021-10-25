@@ -29,8 +29,12 @@ public class Data {
             System.out.println(ex.getMessage());
         }
     }
+    
+    public static void main(String[] args) {
+        createDatabase();
+    }
 
-    public void createDatabase() {    
+    public static void createDatabase() {    
         try {
             Data data = new Data();
             data.checkExistedTable("WEAKENEMY");
@@ -72,7 +76,7 @@ public class Data {
                     + " SATIETY INT, FOOD INT, BATTLE INT, LEGEND INT, MESSAGE VARCHAR(200))");
             
             data.checkExistedTable("CURRENTPET");
-            data.statement.executeUpdate("CREATE  TABLE CURRENTPET  (NAME   VARCHAR(8),"
+            data.statement.executeUpdate("CREATE  TABLE CURRENTPET  (ID INT, NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, CORDYCEPS INT, FOOD INT, BATTLE INT, GAMEOVER BOOLEAN)");
             data.closeConnection();
@@ -83,7 +87,8 @@ public class Data {
     
     public void updateCurrentPet(Pet pet) {
         try {
-            this.statement.executeUpdate("INSERT INTO CURRENTPET VALUES (" + "'" + pet.getName()
+            this.statement.executeUpdate("DELETE FROM CURRENTPET WHERE ID=1");
+            this.statement.executeUpdate("INSERT INTO CURRENTPET VALUES (1," + "'" + pet.getName()
                     + "' ," + pet.getLevel() + "," + pet.getHpMax() + "," + pet.getHp() + ","
                     + pet.getHappy() + "," + pet.getExp() + "," + pet.getSatiety() + ","
                     + pet.getCordycepsCount() + "," + pet.getFoodCount() + ","

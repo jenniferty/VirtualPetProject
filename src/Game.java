@@ -224,6 +224,7 @@ public class Game {
      * @param message
      */
     public void endGame(String message) {
+        Data data = new Data();
         try {
             data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + "'" + pet.getName()
                     + "' ," + pet.getLevel() + "," + pet.getHpMax() + "," + pet.getHp() + ","
