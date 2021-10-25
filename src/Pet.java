@@ -210,8 +210,18 @@ public class Pet {
     public String endGame(String message) {
         Data data = new Data();
         StringBuilder build = new StringBuilder();
+        int id = 0;
         try {
-            data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + "'" + this.getName()
+            ResultSet rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
+            while (rs.next()) {
+                id++;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        id++;
+        try {
+            data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + id + ",'" + this.getName()
                     + "' ," + this.getLevel() + "," + this.getHpMax() + "," + this.getHp() + ","
                     + this.getHappy() + "," + this.getExp() + "," + this.getSatiety() + ","
                     + this.getFoodCount() + "," + this.getBattleCount() + "," + this.getLegendCount() + ",'"
@@ -433,7 +443,7 @@ public class Pet {
         }
         String str = isHappyChange(happy);
         setHappy(happy);
-        str = str + isHappy() + "\n";
+        str = str + isHappy();
         return str;
     }
 

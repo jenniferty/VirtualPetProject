@@ -70,14 +70,14 @@ public abstract class Enemy {
     protected String battle(Pet pet) {
         StringBuilder build = new StringBuilder();
         int hpLoss = (int) ((Math.random() * (getUpper_hp() - getLower_hp()) + getLower_hp())); //randomizes the modification of the hp variable in the Pet class
-        build.append(pet.updateHp(pet.getHp() - hpLoss) + "\n");
+        build.append(pet.updateHp(pet.getHp() - hpLoss));
         if (pet.getHp() == 0) {
             build.append(pet.getName() + " was defeated by " + getName() + ".\n");
         } else {
             build.append(pet.getName() + " has defeated " + getName() + ".\n");
-            build.append(this.getMessage());
-            build.append(pet.updateExp(this.getExp_value()) + "\n");
-            build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()) + "\n");
+            build.append(this.getMessage()+"\n");
+            build.append(pet.updateExp(this.getExp_value()));
+            build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()));
             build.append(pet.updateSatiety(pet.getSatiety() + this.getSatietyWin()) + "\n");
             pet.setBattleCount(pet.getBattleCount() + 1);
         }

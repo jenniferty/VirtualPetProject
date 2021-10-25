@@ -29,6 +29,7 @@ public class Control implements ActionListener {
         String command = e.getActionCommand();
         switch (command) {
             case "New Game":
+                this.view.nameInput.setText("");
                 this.view.card.show(this.view.pagePanel, "new");
                 break;
             case "Continue":
@@ -45,7 +46,7 @@ public class Control implements ActionListener {
                 break;
             case "OK":
                 String name = view.nameInput.getText();
-                if (name == null) {
+                if (name.length()==0) {
                     view.outputNew.setText("Your pet's name can't be blank!");
                 } else if (name.length() > 8) {
                     view.outputNew.setText("Your pet's name can't be greater than 8 characters!");

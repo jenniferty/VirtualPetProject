@@ -71,7 +71,7 @@ public class Data {
             data.statement.executeBatch();
             
             data.checkExistedTable("PETRECORD");
-            data.statement.executeUpdate("CREATE  TABLE PETRECORD  (NAME   VARCHAR(8),"
+            data.statement.executeUpdate("CREATE  TABLE PETRECORD  (ID INT, NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, FOOD INT, BATTLE INT, LEGEND INT, MESSAGE VARCHAR(200))");
             

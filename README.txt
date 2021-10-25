@@ -1,0 +1,1 @@
+Before starting main, connect to database and run EnemyData.java and PetData once and only once to create database.

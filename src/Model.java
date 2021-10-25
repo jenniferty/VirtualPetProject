@@ -38,7 +38,7 @@ public class Model extends Observable {
                 return "No records exists. Befriend your pet and complete your own journey today!";
                 //System.out.println("No records exists. Befriend your pet and complete your own journey today!");
             }
-            rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
+            rs = data.statement.executeQuery("SELECT * FROM PETRECORD ORDER BY ID DESC");
             while (rs.next()) {
                 build.append("Name: " + rs.getString("NAME") + "\n"
                         + "Level: " + rs.getInt("LEVEL") + "\n"
