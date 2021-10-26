@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
@@ -34,15 +33,14 @@ import javax.swing.JTextPane;
  */
 public class View extends JFrame implements Observer {
 
-    public CardLayout card = new CardLayout();
-    public JPanel pagePanel;
-    public JPanel mainMenuPanel, gameMenuPanel, newGamePanel, recordsMenuPanel, battleMenuPanel, battleMenuPanel2, foodMenuPanel, statsMenuPanel, endMenuPanel;
-    public JTextPane outputMain, outputGame, outputNew, outputRecord, outputBattle, outputBattle2, outputFood, outputStat, outputEnd;
+    private CardLayout card = new CardLayout();
+    private JPanel pagePanel, mainMenuPanel, gameMenuPanel, newGamePanel, recordsMenuPanel, battleMenuPanel, battleMenuPanel2, foodMenuPanel, statsMenuPanel, endMenuPanel;
+    private JTextPane outputMain, outputGame, outputNew, outputRecord, outputBattle, outputBattle2, outputFood, outputStat, outputEnd;
     private JLabel petName = new JLabel("Enter your pet's name (8 char):");
-    public JTextField nameInput = new JTextField(8);
+    private JTextField nameInput = new JTextField(8);
     private JButton nameButton = new JButton("OK");
     private JButton newGameButton = new JButton("New Game");
-    public JButton continueButton = new JButton("Continue");
+    private JButton continueButton = new JButton("Continue");
     private JButton viewRecordsButton = new JButton("Records");
     private JButton quitButton = new JButton("Quit");
     private JButton quitButton2 = new JButton("Quit");
@@ -61,15 +59,13 @@ public class View extends JFrame implements Observer {
     private JButton nextButton = new JButton("Next");
     private JLabel foodLabel = new JLabel("Food:");
     private String[] food = new String[6];
-    public JComboBox foodBox = new JComboBox(food);
+    private JComboBox foodBox = new JComboBox(food);
     private ImageIcon image;
-
-    Pet pet;
 
     public View() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(630, 500);
-        this.pagePanel = new JPanel(card);
+        this.pagePanel = new JPanel(getCard());
         this.mainMenuPanel = mainMenu();
         this.newGamePanel = newGame();
         this.recordsMenuPanel = recordsMenu();
@@ -96,167 +92,167 @@ public class View extends JFrame implements Observer {
     public JPanel mainMenu() {
         JPanel main = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputMain = new JTextPane();
+        setOutputMain(new JTextPane());
         String message = this.titleScreen();
-        this.image = new ImageIcon(new ImageIcon("title.png").getImage().getScaledInstance(600, 350, Image.SCALE_DEFAULT));
-        outputMain.insertIcon(image);
-        outputMain.setEditable(false);
-        outputPanel.add(outputMain);
+        this.setImage(new ImageIcon(new ImageIcon("title.png").getImage().getScaledInstance(600, 350, Image.SCALE_DEFAULT)));
+        getOutputMain().insertIcon(getImage());
+        getOutputMain().setEditable(false);
+        outputPanel.add(getOutputMain());
         outputPanel.setSize(600, 350);
         main.add(outputPanel, BorderLayout.NORTH);
-        main.add(newGameButton);
-        main.add(continueButton);
+        main.add(getNewGameButton());
+        main.add(getContinueButton());
         Boolean valid = !validateSave();
-        continueButton.setEnabled(valid);
-        main.add(viewRecordsButton);
-        main.add(quitButton);
+        getContinueButton().setEnabled(valid);
+        main.add(getViewRecordsButton());
+        main.add(getQuitButton());
         return main;
     }
 
     public JPanel newGame() {
         JPanel newgame = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputNew = new JTextPane();
+        setOutputNew(new JTextPane());
         outputPanel.setSize(600, 350);
-        outputNew.setText("");
-        outputNew.setEditable(false);
-        outputNew.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputNew);
+        getOutputNew().setText("");
+        getOutputNew().setEditable(false);
+        getOutputNew().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputNew());
         newgame.add(outputPanel, BorderLayout.NORTH);
-        newgame.add(petName);
-        newgame.add(nameInput);
-        newgame.add(nameButton);
-        newgame.add(mainMenuButton);
+        newgame.add(getPetName());
+        newgame.add(getNameInput());
+        newgame.add(getNameButton());
+        newgame.add(getMainMenuButton());
         return newgame;
     }
 
     public JPanel gameMenu() {
         JPanel start = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputGame = new JTextPane();
+        setOutputGame(new JTextPane());
         outputPanel.setSize(600, 350);
-        outputGame.setText("");
-        outputGame.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputGame);
+        getOutputGame().setText("");
+        getOutputGame().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputGame());
         start.add(outputPanel, BorderLayout.NORTH);
-        start.add(battleButton);
-        start.add(foodButton);
-        start.add(viewStatsButton);
-        start.add(mainMenuButton2);
+        start.add(getBattleButton());
+        start.add(getFoodButton());
+        start.add(getViewStatsButton());
+        start.add(getMainMenuButton2());
         return start;
     }
 
     public JPanel recordsMenu() {
         JPanel records = new JPanel();
-        outputRecord = new JTextPane();
-        JScrollPane outputPanel = new JScrollPane(outputRecord);
+        setOutputRecord(new JTextPane());
+        JScrollPane outputPanel = new JScrollPane(getOutputRecord());
         outputPanel.setPreferredSize(new Dimension(600, 350));
         //outputRecord.setPreferredSize(new Dimension(600, 350));
         records.add(outputPanel, BorderLayout.NORTH);
-        records.add(mainMenuButton3);
+        records.add(getMainMenuButton3());
         return records;
     }
 
     public JPanel battleMenu() {
         JPanel battle = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputBattle = new JTextPane();
+        setOutputBattle(new JTextPane());
         outputPanel.setSize(600, 350);
-        outputBattle.setText("");
-        outputBattle.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputBattle);
+        getOutputBattle().setText("");
+        getOutputBattle().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputBattle());
         battle.add(outputPanel, BorderLayout.NORTH);
-        battle.add(fightButton);
-        battle.add(runButton);
+        battle.add(getFightButton());
+        battle.add(getRunButton());
         return battle;
     }
     
     public JPanel battleMenu2() {
         JPanel battle = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputBattle2 = new JTextPane();
+        setOutputBattle2(new JTextPane());
         outputPanel.setSize(600, 350);
-        outputBattle2.setText("");
-        outputBattle2.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputBattle2);
+        getOutputBattle2().setText("");
+        getOutputBattle2().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputBattle2());
         battle.add(outputPanel, BorderLayout.NORTH);
-        battle.add(nextButton);
+        battle.add(getNextButton());
         return battle;
     }
 
     public JPanel foodMenu() {
         JPanel foodPanel = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputFood = new JTextPane();
+        setOutputFood(new JTextPane());
         outputPanel.setSize(600, 350);
-        outputFood.setText("");
-        outputFood.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputFood);
+        getOutputFood().setText("");
+        getOutputFood().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputFood());
         outputPanel.setVisible(true);
         foodPanel.add(outputPanel, BorderLayout.NORTH);
-        foodPanel.add(foodLabel);
-        food[0] = "Apple";
-        food[1] = "Steak";
-        food[2] = "Burger";
-        food[3] = "Cordyceps";
-        food[4] = "Mushroom";
-        food[5] = "Bitter Powder";
-        foodBox = new JComboBox(food);
-        foodPanel.add(foodBox);
-        foodPanel.add(eatButton);
-        foodPanel.add(backButton2);
+        foodPanel.add(getFoodLabel());
+        getFood()[0] = "Apple";
+        getFood()[1] = "Steak";
+        getFood()[2] = "Burger";
+        getFood()[3] = "Cordyceps";
+        getFood()[4] = "Mushroom";
+        getFood()[5] = "Bitter Powder";
+        setFoodBox(new JComboBox(getFood()));
+        foodPanel.add(getFoodBox());
+        foodPanel.add(getEatButton());
+        foodPanel.add(getBackButton2());
         return foodPanel;
     }
 
     public JPanel statsMenu() {
         JPanel stats = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputStat = new JTextPane();
+        setOutputStat(new JTextPane());
         outputPanel.setPreferredSize(new Dimension(600, 350));
-        outputStat.setText("");
-        outputStat.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputStat);
+        getOutputStat().setText("");
+        getOutputStat().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputStat());
         outputPanel.setVisible(true);
         stats.add(outputPanel, BorderLayout.NORTH);
-        stats.add(backButton);
+        stats.add(getBackButton());
         return stats;
     }
 
     public JPanel endMenu() {
         JPanel end = new JPanel();
         JPanel outputPanel = new JPanel();
-        outputEnd = new JTextPane();
+        setOutputEnd(new JTextPane());
         outputPanel.setPreferredSize(new Dimension(600, 350));
-        outputEnd.setText("");
-        outputEnd.setPreferredSize(new Dimension(600, 350));
-        outputPanel.add(outputEnd);
+        getOutputEnd().setText("");
+        getOutputEnd().setPreferredSize(new Dimension(600, 350));
+        outputPanel.add(getOutputEnd());
         outputPanel.setVisible(true);
         end.add(outputPanel, BorderLayout.NORTH);
-        end.add(tryAgainButton);
-        end.add(quitButton2);
+        end.add(getTryAgainButton());
+        end.add(getQuitButton2());
         return end;
     }
 
     public void addActionListener(ActionListener listener) {
-        this.newGameButton.addActionListener(listener);
-        this.continueButton.addActionListener(listener);
-        this.viewRecordsButton.addActionListener(listener);
-        this.quitButton.addActionListener(listener);
-        this.quitButton2.addActionListener(listener);
-        this.nameButton.addActionListener(listener);
-        this.battleButton.addActionListener(listener);
-        this.foodButton.addActionListener(listener);
-        this.viewStatsButton.addActionListener(listener);
-        this.mainMenuButton.addActionListener(listener);
-        this.mainMenuButton2.addActionListener(listener);
-        this.mainMenuButton3.addActionListener(listener);
-        this.fightButton.addActionListener(listener);
-        this.runButton.addActionListener(listener);
-        this.eatButton.addActionListener(listener);
-        this.backButton.addActionListener(listener);
-        this.backButton2.addActionListener(listener);
-        this.tryAgainButton.addActionListener(listener);
-        this.nextButton.addActionListener(listener);
+        this.getNewGameButton().addActionListener(listener);
+        this.getContinueButton().addActionListener(listener);
+        this.getViewRecordsButton().addActionListener(listener);
+        this.getQuitButton().addActionListener(listener);
+        this.getQuitButton2().addActionListener(listener);
+        this.getNameButton().addActionListener(listener);
+        this.getBattleButton().addActionListener(listener);
+        this.getFoodButton().addActionListener(listener);
+        this.getViewStatsButton().addActionListener(listener);
+        this.getMainMenuButton().addActionListener(listener);
+        this.getMainMenuButton2().addActionListener(listener);
+        this.getMainMenuButton3().addActionListener(listener);
+        this.getFightButton().addActionListener(listener);
+        this.getRunButton().addActionListener(listener);
+        this.getEatButton().addActionListener(listener);
+        this.getBackButton().addActionListener(listener);
+        this.getBackButton2().addActionListener(listener);
+        this.getTryAgainButton().addActionListener(listener);
+        this.getNextButton().addActionListener(listener);
     }
 
     public String titleScreen() {
@@ -284,7 +280,7 @@ public class View extends JFrame implements Observer {
         Boolean canContinue = null;
         Boolean valid = null;
         try {
-            rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
+            rs = data.getStatement().executeQuery("SELECT * FROM CURRENTPET");
             if (rs.next() == false) {
                 return true;
             }
@@ -333,4 +329,409 @@ public class View extends JFrame implements Observer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+        /**
+     * @return the card
+     */
+    public CardLayout getCard() {
+        return card;
+    }
+
+    /**
+     * @return the pagePanel
+     */
+    public JPanel getPagePanel() {
+        return pagePanel;
+    }
+
+    /**
+     * @return the mainMenuPanel
+     */
+    public JPanel getMainMenuPanel() {
+        return mainMenuPanel;
+    }
+
+    /**
+     * @return the gameMenuPanel
+     */
+    public JPanel getGameMenuPanel() {
+        return gameMenuPanel;
+    }
+
+    /**
+     * @return the newGamePanel
+     */
+    public JPanel getNewGamePanel() {
+        return newGamePanel;
+    }
+
+    /**
+     * @return the recordsMenuPanel
+     */
+    public JPanel getRecordsMenuPanel() {
+        return recordsMenuPanel;
+    }
+
+    /**
+     * @return the battleMenuPanel
+     */
+    public JPanel getBattleMenuPanel() {
+        return battleMenuPanel;
+    }
+
+    /**
+     * @return the battleMenuPanel2
+     */
+    public JPanel getBattleMenuPanel2() {
+        return battleMenuPanel2;
+    }
+
+    /**
+     * @return the foodMenuPanel
+     */
+    public JPanel getFoodMenuPanel() {
+        return foodMenuPanel;
+    }
+
+    /**
+     * @return the statsMenuPanel
+     */
+    public JPanel getStatsMenuPanel() {
+        return statsMenuPanel;
+    }
+
+    /**
+     * @return the endMenuPanel
+     */
+    public JPanel getEndMenuPanel() {
+        return endMenuPanel;
+    }
+
+    /**
+     * @return the outputMain
+     */
+    public JTextPane getOutputMain() {
+        return outputMain;
+    }
+
+    /**
+     * @param outputMain the outputMain to set
+     */
+    public void setOutputMain(JTextPane outputMain) {
+        this.outputMain = outputMain;
+    }
+
+    /**
+     * @return the outputGame
+     */
+    public JTextPane getOutputGame() {
+        return outputGame;
+    }
+
+    /**
+     * @param outputGame the outputGame to set
+     */
+    public void setOutputGame(JTextPane outputGame) {
+        this.outputGame = outputGame;
+    }
+
+    /**
+     * @return the outputNew
+     */
+    public JTextPane getOutputNew() {
+        return outputNew;
+    }
+
+    /**
+     * @param outputNew the outputNew to set
+     */
+    public void setOutputNew(JTextPane outputNew) {
+        this.outputNew = outputNew;
+    }
+
+    /**
+     * @return the outputRecord
+     */
+    public JTextPane getOutputRecord() {
+        return outputRecord;
+    }
+
+    /**
+     * @param outputRecord the outputRecord to set
+     */
+    public void setOutputRecord(JTextPane outputRecord) {
+        this.outputRecord = outputRecord;
+    }
+
+    /**
+     * @return the outputBattle
+     */
+    public JTextPane getOutputBattle() {
+        return outputBattle;
+    }
+
+    /**
+     * @param outputBattle the outputBattle to set
+     */
+    public void setOutputBattle(JTextPane outputBattle) {
+        this.outputBattle = outputBattle;
+    }
+
+    /**
+     * @return the outputBattle2
+     */
+    public JTextPane getOutputBattle2() {
+        return outputBattle2;
+    }
+
+    /**
+     * @param outputBattle2 the outputBattle2 to set
+     */
+    public void setOutputBattle2(JTextPane outputBattle2) {
+        this.outputBattle2 = outputBattle2;
+    }
+
+    /**
+     * @return the outputFood
+     */
+    public JTextPane getOutputFood() {
+        return outputFood;
+    }
+
+    /**
+     * @param outputFood the outputFood to set
+     */
+    public void setOutputFood(JTextPane outputFood) {
+        this.outputFood = outputFood;
+    }
+
+    /**
+     * @return the outputStat
+     */
+    public JTextPane getOutputStat() {
+        return outputStat;
+    }
+
+    /**
+     * @param outputStat the outputStat to set
+     */
+    public void setOutputStat(JTextPane outputStat) {
+        this.outputStat = outputStat;
+    }
+
+    /**
+     * @return the outputEnd
+     */
+    public JTextPane getOutputEnd() {
+        return outputEnd;
+    }
+
+    /**
+     * @param outputEnd the outputEnd to set
+     */
+    public void setOutputEnd(JTextPane outputEnd) {
+        this.outputEnd = outputEnd;
+    }
+
+    /**
+     * @return the petName
+     */
+    public JLabel getPetName() {
+        return petName;
+    }
+
+    /**
+     * @return the nameInput
+     */
+    public JTextField getNameInput() {
+        return nameInput;
+    }
+
+    /**
+     * @param nameInput the nameInput to set
+     */
+    public void setNameInput(JTextField nameInput) {
+        this.nameInput = nameInput;
+    }
+
+    /**
+     * @return the nameButton
+     */
+    public JButton getNameButton() {
+        return nameButton;
+    }
+
+    /**
+     * @return the newGameButton
+     */
+    public JButton getNewGameButton() {
+        return newGameButton;
+    }
+
+    /**
+     * @return the continueButton
+     */
+    public JButton getContinueButton() {
+        return continueButton;
+    }
+
+    /**
+     * @return the viewRecordsButton
+     */
+    public JButton getViewRecordsButton() {
+        return viewRecordsButton;
+    }
+
+    /**
+     * @return the quitButton
+     */
+    public JButton getQuitButton() {
+        return quitButton;
+    }
+
+    /**
+     * @return the quitButton2
+     */
+    public JButton getQuitButton2() {
+        return quitButton2;
+    }
+
+    /**
+     * @return the battleButton
+     */
+    public JButton getBattleButton() {
+        return battleButton;
+    }
+
+    /**
+     * @return the fightButton
+     */
+    public JButton getFightButton() {
+        return fightButton;
+    }
+
+    /**
+     * @return the runButton
+     */
+    public JButton getRunButton() {
+        return runButton;
+    }
+
+    /**
+     * @return the foodButton
+     */
+    public JButton getFoodButton() {
+        return foodButton;
+    }
+
+    /**
+     * @return the eatButton
+     */
+    public JButton getEatButton() {
+        return eatButton;
+    }
+
+    /**
+     * @return the backButton
+     */
+    public JButton getBackButton() {
+        return backButton;
+    }
+
+    /**
+     * @return the backButton2
+     */
+    public JButton getBackButton2() {
+        return backButton2;
+    }
+
+    /**
+     * @return the viewStatsButton
+     */
+    public JButton getViewStatsButton() {
+        return viewStatsButton;
+    }
+
+    /**
+     * @return the mainMenuButton
+     */
+    public JButton getMainMenuButton() {
+        return mainMenuButton;
+    }
+
+    /**
+     * @return the mainMenuButton2
+     */
+    public JButton getMainMenuButton2() {
+        return mainMenuButton2;
+    }
+
+    /**
+     * @return the mainMenuButton3
+     */
+    public JButton getMainMenuButton3() {
+        return mainMenuButton3;
+    }
+
+    /**
+     * @return the tryAgainButton
+     */
+    public JButton getTryAgainButton() {
+        return tryAgainButton;
+    }
+
+    /**
+     * @return the nextButton
+     */
+    public JButton getNextButton() {
+        return nextButton;
+    }
+
+    /**
+     * @return the foodLabel
+     */
+    public JLabel getFoodLabel() {
+        return foodLabel;
+    }
+
+    /**
+     * @return the food
+     */
+    public String[] getFood() {
+        return food;
+    }
+
+    /**
+     * @param food the food to set
+     */
+    public void setFood(String[] food) {
+        this.food = food;
+    }
+
+    /**
+     * @return the foodBox
+     */
+    public JComboBox getFoodBox() {
+        return foodBox;
+    }
+
+    /**
+     * @param foodBox the foodBox to set
+     */
+    public void setFoodBox(JComboBox foodBox) {
+        this.foodBox = foodBox;
+    }
+
+    /**
+     * @return the image
+     */
+    public ImageIcon getImage() {
+        return image;
+    }
+
+    /**
+     * @param image the image to set
+     */
+    public void setImage(ImageIcon image) {
+        this.image = image;
+    }
 }

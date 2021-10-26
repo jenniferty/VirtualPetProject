@@ -39,7 +39,7 @@ public class StrongEnemy extends Enemy {
      */
     @Override
     protected void initialise() {       
-        ResultSet initialiseEnemy = this.getEnemyData(pet.getLevel());
+        ResultSet initialiseEnemy = this.getEnemyData(getPet().getLevel());
         try {
             this.setName(initialiseEnemy.getString("NAME"));
             this.setLower_hp(initialiseEnemy.getInt("MIN_DAMAGE"));

@@ -20,8 +20,7 @@ public final class DBManager {
     private static final String USER_NAME = "jennifer"; //your DB username
     private static final String PASSWORD = "15903786"; //your DB password
     private static final String URL = "jdbc:derby://localhost:1527/VirtualPetDB";  //url of the DB host
-
-    Connection conn;
+    private Connection conn;
 
     public DBManager() {
         establishConnection();
@@ -33,14 +32,14 @@ public final class DBManager {
     }
 
     public Connection getConnection() {
-        return this.conn;
+        return this.getConn();
     }
 
     //Establish connection
     public void establishConnection() {
-        if (this.conn == null) {
+        if (this.getConn() == null) {
             try {
-                conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+                setConn(DriverManager.getConnection(URL, USER_NAME, PASSWORD));
                 //System.out.println(URL + " Get Connected Successfully ....");
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -49,9 +48,9 @@ public final class DBManager {
     }
 
     public void closeConnections() {
-        if (conn != null) {
+        if (getConn() != null) {
             try {
-                conn.close();
+                getConn().close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -60,7 +59,7 @@ public final class DBManager {
 
     public ResultSet queryDB(String sql) {
 
-        Connection connection = this.conn;
+        Connection connection = this.getConn();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -76,7 +75,7 @@ public final class DBManager {
 
     public void updateDB(String sql) {
 
-        Connection connection = this.conn;
+        Connection connection = this.getConn();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -87,6 +86,20 @@ public final class DBManager {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    /**
+     * @return the conn
+     */
+    public Connection getConn() {
+        return conn;
+    }
+
+    /**
+     * @param conn the conn to set
+     */
+    public void setConn(Connection conn) {
+        this.conn = conn;
     }
 
 }

@@ -13,10 +13,10 @@ import java.awt.event.ActionListener;
  */
 public class Control implements ActionListener {
 
-    public View view;
-    public Model model;
-    public Pet pet;
-    public Enemy enemy;
+    private View view;
+    private Model model;
+    private Pet pet;
+    private Enemy enemy;
 
     public Control(View view, Model model) {
         this.view = view;
@@ -29,115 +29,170 @@ public class Control implements ActionListener {
         String command = e.getActionCommand();
         switch (command) {
             case "New Game":
-                this.view.nameInput.setText("");
-                this.view.card.show(this.view.pagePanel, "new");
+                this.getView().getNameInput().setText("");
+                this.getView().getCard().show(this.getView().getPagePanel(), "new");
                 break;
             case "Continue":
-                pet = new Pet();
-                this.view.card.show(this.view.pagePanel, "game menu");
+                setPet(new Pet());
+                this.getView().getCard().show(this.getView().getPagePanel(), "game menu");
                 break;
             case "Records":
-                String record = model.viewRecord();
-                view.outputRecord.setText(record);
-                this.view.card.show(this.view.pagePanel, "record");
+                String record = getModel().viewRecord();
+                getView().getOutputRecord().setText(record);
+                this.getView().getCard().show(this.getView().getPagePanel(), "record");
                 break;
             case "Quit":
                 System.exit(0);
                 break;
             case "OK":
-                String name = view.nameInput.getText();
+                String name = getView().getNameInput().getText();
                 if (name.length()==0) {
-                    view.outputNew.setText("Your pet's name can't be blank!");
+                    getView().getOutputNew().setText("Your pet's name can't be blank!");
                 } else if (name.length() > 8) {
-                    view.outputNew.setText("Your pet's name can't be greater than 8 characters!");
+                    getView().getOutputNew().setText("Your pet's name can't be greater than 8 characters!");
                 } else {
-                    pet = new Pet(name);
-                    this.view.card.show(view.pagePanel, "game menu");
+                    setPet(new Pet(name));
+                    this.getView().getCard().show(getView().getPagePanel(), "game menu");
                 }
                 break;
             case "Battle":
                 String str;
-                if (pet.getSatiety() == 0) {
-                    str = pet.getName() + " is too hungry to fight.";
-                    this.view.outputBattle.setText(str);
-                    this.view.card.show(view.pagePanel, "battle");
+                if (getPet().getSatiety() == 0) {
+                    str = getPet().getName() + " is too hungry to fight.";
+                    this.getView().getOutputBattle().setText(str);
+                    this.getView().getCard().show(getView().getPagePanel(), "battle");
                     break;
                 }
-                str = this.model.battleMenu();
-                this.view.outputBattle.setText(str);
-                this.view.card.show(this.view.pagePanel, "battle");
+                str = this.getModel().battleMenu();
+                this.getView().getOutputBattle().setText(str);
+                this.getView().getCard().show(this.getView().getPagePanel(), "battle");
                 break;
             case "Food":
-                this.view.outputFood.setText("");
-                this.view.card.show(this.view.pagePanel, "food");
+                this.getView().getOutputFood().setText("");
+                this.getView().getCard().show(this.getView().getPagePanel(), "food");
                 break;
             case "Stats":
-                view.outputStat.setText(pet.toString());
-                this.view.card.show(this.view.pagePanel, "stats");
+                getView().getOutputStat().setText(getPet().toString());
+                this.getView().getCard().show(this.getView().getPagePanel(), "stats");
                 break;
             case "Main Menu":
-                this.view.card.show(this.view.pagePanel, "main");
+                this.getView().getCard().show(this.getView().getPagePanel(), "main");
                 break;
             case "Fight":
-                String fight = this.model.enemy.battle(pet);
-                this.view.outputBattle2.setText(fight);
-                if (pet.getLevel() == pet.getLevelMax()) {
-                    if (pet.getBattleCount() > (pet.getFoodCount() * 3)) {
-                        pet.setMessage("A courageous champion has reached the peak of brilliance. With the defeat of " + this.model.enemy.getName() + ", you've helped " + pet.getName() + " reached their goal.");
-                        String end = pet.endGame(pet.getMessage());
-                        this.view.outputEnd.setText(end);
-                        this.view.card.show(this.view.pagePanel, "end");
+                String fight = this.getModel().getEnemy().battle(getPet());
+                this.getView().getOutputBattle2().setText(fight);
+                if (getPet().getLevel() == getPet().getLevelMax()) {
+                    if (getPet().getBattleCount() > (getPet().getFoodCount() * 3)) {
+                        getPet().setMessage("A courageous champion has reached the peak of brilliance. With the defeat of " + this.getModel().getEnemy().getName() + ", you've helped " + getPet().getName() + " reached their goal.");
+                        String end = getPet().endGame(getPet().getMessage());
+                        this.getView().getOutputEnd().setText(end);
+                        this.getView().getCard().show(this.getView().getPagePanel(), "end");
                     } else {
-                        pet.setMessage("A good warrior knows balance. Congratuations " + pet.getName() + " on reaching the end of your journey!");
-                        String end = pet.endGame(pet.getMessage());
-                        this.view.outputEnd.setText(end);
-                        this.view.card.show(this.view.pagePanel, "end");
+                        getPet().setMessage("A good warrior knows balance. Congratuations " + getPet().getName() + " on reaching the end of your journey!");
+                        String end = getPet().endGame(getPet().getMessage());
+                        this.getView().getOutputEnd().setText(end);
+                        this.getView().getCard().show(this.getView().getPagePanel(), "end");
                     }
-                } else if (pet.getHp() == 0) {
-                    pet.setMessage("A brave young warrior has died too soon. Farewell " + pet.getName() + " and congratulations " + this.model.enemy.getName() + ".");
+                } else if (getPet().getHp() == 0) {
+                    getPet().setMessage("A brave young warrior has died too soon. Farewell " + getPet().getName() + " and congratulations " + this.getModel().getEnemy().getName() + ".");
 
-                    String end = pet.endGame(pet.getMessage());
-                    this.view.outputEnd.setText(end);
-                    this.view.card.show(this.view.pagePanel, "end");
-                } else if (pet.getSatiety() == 0) {
-                    str = pet.getName() + " is too hungry to fight.";
-                    this.view.outputBattle.setText(str);
-                    this.view.card.show(view.pagePanel, "battle");
+                    String end = getPet().endGame(getPet().getMessage());
+                    this.getView().getOutputEnd().setText(end);
+                    this.getView().getCard().show(this.getView().getPagePanel(), "end");
+                } else if (getPet().getSatiety() == 0) {
+                    str = getPet().getName() + " is too hungry to fight.";
+                    this.getView().getOutputBattle().setText(str);
+                    this.getView().getCard().show(getView().getPagePanel(), "battle");
                     break;
                 } else {
-                    this.view.card.show(this.view.pagePanel, "battle2");
+                    this.getView().getCard().show(this.getView().getPagePanel(), "battle2");
                 }
                 break;
             case "Run":
-                this.view.card.show(this.view.pagePanel, "game menu");
+                this.getView().getCard().show(this.getView().getPagePanel(), "game menu");
                 break;
             case "Eat":
-                String food = view.foodBox.getSelectedItem().toString();
-                Food eat = model.getFood(food);
-                this.view.outputFood.setText(pet.eat(eat));
-                if (pet.getCordycepsCount() >= 3) {
-                    String end = pet.endGame(pet.getMessage());
-                    this.view.outputEnd.setText(end);
-                    this.view.card.show(this.view.pagePanel, "end");
+                String food = getView().getFoodBox().getSelectedItem().toString();
+                Food eat = getModel().getFood(food);
+                this.getView().getOutputFood().setText(getPet().eat(eat));
+                if (getPet().getCordycepsCount() >= 3) {
+                    String end = getPet().endGame(getPet().getMessage());
+                    this.getView().getOutputEnd().setText(end);
+                    this.getView().getCard().show(this.getView().getPagePanel(), "end");
                 }
-                if (pet.getHp() <= 0) {
-                    String end = pet.endGame(pet.getMessage());
-                    this.view.outputEnd.setText(end);
-                    this.view.card.show(this.view.pagePanel, "end");
+                if (getPet().getHp() <= 0) {
+                    String end = getPet().endGame(getPet().getMessage());
+                    this.getView().getOutputEnd().setText(end);
+                    this.getView().getCard().show(this.getView().getPagePanel(), "end");
                 }
                 break;
             case "Back":
-                this.view.card.show(this.view.pagePanel, "game menu");
+                this.getView().getCard().show(this.getView().getPagePanel(), "game menu");
                 break;
             case "Try Again":
-                this.view.card.show(this.view.pagePanel, "main");
+                this.getView().getCard().show(this.getView().getPagePanel(), "main");
                 break;
             case "Next":
-                String next = this.model.battleMenu();
-                this.view.outputBattle.setText(next);
-                this.view.card.show(this.view.pagePanel, "battle");
+                String next = this.getModel().battleMenu();
+                this.getView().getOutputBattle().setText(next);
+                this.getView().getCard().show(this.getView().getPagePanel(), "battle");
                 break;
         }
     }
 
+    /**
+     * @return the view
+     */
+    public View getView() {
+        return view;
+    }
+
+    /**
+     * @param view the view to set
+     */
+    public void setView(View view) {
+        this.view = view;
+    }
+
+    /**
+     * @return the model
+     */
+    public Model getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the pet
+     */
+    public Pet getPet() {
+        return pet;
+    }
+
+    /**
+     * @param pet the pet to set
+     */
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    /**
+     * @return the enemy
+     */
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
+    /**
+     * @param enemy the enemy to set
+     */
+    public void setEnemy(Enemy enemy) {
+        this.enemy = enemy;
+    }
 }

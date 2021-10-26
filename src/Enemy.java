@@ -24,10 +24,10 @@ public abstract class Enemy {
     protected int happyWin;
     protected int satietyWin;
     protected String message;
-    Connection conn;
+    protected Connection conn;
     protected Statement statement;
     protected Pet pet;
-    ResultSet set;
+    protected ResultSet set;
 
     /**
      * Empty constructor. Cannot create an Enemy object without a child class
@@ -51,7 +51,7 @@ public abstract class Enemy {
      */
     protected void initialise() {
         try {
-            ResultSet initialiseEnemy = this.getEnemyData(pet.getLevel());
+            ResultSet initialiseEnemy = this.getEnemyData(getPet().getLevel());
             this.setName(initialiseEnemy.getString("NAME"));
             this.setLower_hp(initialiseEnemy.getInt("MIN_DAMAGE"));
             this.setUpper_hp(initialiseEnemy.getInt("MAX_DAMAGE"));
@@ -92,7 +92,7 @@ public abstract class Enemy {
             case 1:
             case 2:
                     try {
-                rs = data.statement.executeQuery("SELECT * FROM WEAKENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
+                rs = data.getStatement().executeQuery("SELECT * FROM WEAKENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
                 if (rs.next()) {
                     rs = rs;
                 }
@@ -105,7 +105,7 @@ public abstract class Enemy {
             case 5:
             case 6:
                     try {
-                rs = data.statement.executeQuery("SELECT * FROM AVERAGEENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
+                rs = data.getStatement().executeQuery("SELECT * FROM AVERAGEENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
                 if (rs.next()) {
                     rs = rs;
                 }
@@ -117,7 +117,7 @@ public abstract class Enemy {
             case 8:
             case 9:
                     try {
-                rs = data.statement.executeQuery("SELECT * FROM STRONGENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
+                rs = data.getStatement().executeQuery("SELECT * FROM STRONGENEMY ORDER BY RANDOM() OFFSET 0 ROW FETCH NEXT 1 ROWS ONLY");
                 if (rs.next()) {
                     rs = rs;
                 }
@@ -211,6 +211,62 @@ public abstract class Enemy {
      */
     protected int getSatietyWin() {
         return satietyWin;
+    }
+
+    /**
+     * @return the conn
+     */
+    public Connection getConn() {
+        return conn;
+    }
+
+    /**
+     * @param conn the conn to set
+     */
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
+    /**
+     * @return the statement
+     */
+    public Statement getStatement() {
+        return statement;
+    }
+
+    /**
+     * @param statement the statement to set
+     */
+    public void setStatement(Statement statement) {
+        this.statement = statement;
+    }
+
+    /**
+     * @return the pet
+     */
+    public Pet getPet() {
+        return pet;
+    }
+
+    /**
+     * @param pet the pet to set
+     */
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    /**
+     * @return the set
+     */
+    public ResultSet getSet() {
+        return set;
+    }
+
+    /**
+     * @param set the set to set
+     */
+    public void setSet(ResultSet set) {
+        this.set = set;
     }
 
 }

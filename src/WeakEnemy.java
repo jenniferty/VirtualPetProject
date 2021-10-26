@@ -29,25 +29,4 @@ public class WeakEnemy extends Enemy {
         this.satietyWin = -2;
         initialise();
     }
-
-    /**
-     * Overrides the abstract method. Opens the weakenemy.txt file and adds each
-     * line as an element of an ArrayList.
-     *
-     * @return an ArrayList that is used to initialise an WeakEnemy object.
-     */
-   // @Override
-    /*protected ArrayList<String> getList() {
-        List<String> enemyList = new ArrayList<>();
-        try ( Scanner s = new Scanner(new FileReader("weakenemy.txt"))) {
-            while (s.hasNext()) {
-                enemyList.add(s.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("File can't be read.");
-        }
-        return (ArrayList) enemyList;
-    }*/
 }

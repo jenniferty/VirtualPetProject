@@ -15,8 +15,8 @@ import java.util.Scanner;
  */
 public class Model extends Observable {
 
-    public Data data;
-    public Enemy enemy;
+    private Data data;
+    private Enemy enemy;
 
     public Model(Data data) {
         this.data = data;
@@ -28,8 +28,8 @@ public class Model extends Observable {
         //String record = null;
         StringBuilder build = new StringBuilder();
         try {
-            data.statement.setMaxRows(10);
-            rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
+            data.getStatement().setMaxRows(10);
+            rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD");
             int count = 0;
             while (rs.next()) {
                 count++;
@@ -38,7 +38,7 @@ public class Model extends Observable {
                 return "No records exists. Befriend your pet and complete your own journey today!";
                 //System.out.println("No records exists. Befriend your pet and complete your own journey today!");
             }
-            rs = data.statement.executeQuery("SELECT * FROM PETRECORD ORDER BY ID DESC");
+            rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD ORDER BY ID DESC");
             while (rs.next()) {
                 build.append("Name: " + rs.getString("NAME") + "\n"
                         + "Level: " + rs.getInt("LEVEL") + "\n"
@@ -59,28 +59,28 @@ public class Model extends Observable {
 
     public String battleMenu() {
         StringBuilder build = new StringBuilder();
-        Pet pet=new Pet();
+        Pet pet = new Pet();
         if (pet.getSatiety() == 0) {
             build.append(pet.getName() + " is too hungry to fight.\n");
         }
         switch (pet.getLevel()) { //creates new Enemy object depending on level member of Pet object
             case 1:
             case 2:
-                enemy = new WeakEnemy(pet); //declaration with parent object
+                setEnemy(new WeakEnemy(pet)); //declaration with parent object
                 break;
             case 3:
             case 4:
             case 5:
             case 6:
-                enemy = new AverageEnemy(pet); //declaration with parent object
+                setEnemy(new AverageEnemy(pet)); //declaration with parent object
                 break;
             case 7:
             case 8:
             case 9:
-                enemy = new StrongEnemy(pet); //declaration with parent object
+                setEnemy(new StrongEnemy(pet)); //declaration with parent object
                 break;
         }
-        build.append(enemy.getName() + " has appeared!\n");
+        build.append("A wild " + getEnemy().getName() + " has appeared!\n");
         build.append(pet.getName() + " Lv: " + pet.getLevel() + " HP: " + pet.getHp() + "/" + pet.getHpMax());
 
         return build.toString();
@@ -102,5 +102,33 @@ public class Model extends Observable {
                 return Food.BITTERPOWDER;
         }
         return null;
+    }
+
+    /**
+     * @return the data
+     */
+    public Data getData() {
+        return data;
+    }
+
+    /**
+     * @param data the data to set
+     */
+    public void setData(Data data) {
+        this.data = data;
+    }
+
+    /**
+     * @return the enemy
+     */
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
+    /**
+     * @param enemy the enemy to set
+     */
+    public void setEnemy(Enemy enemy) {
+        this.enemy = enemy;
     }
 }

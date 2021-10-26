@@ -1,15 +1,6 @@
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -88,7 +79,7 @@ public class Pet {
         Data data = new Data();
 
         try {
-            rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
+            rs = data.getStatement().executeQuery("SELECT * FROM CURRENTPET");
             if (rs.next()) {
                 rs = rs;
             }
@@ -120,7 +111,7 @@ public class Pet {
         Boolean canContinue = null;
         Boolean valid = null;
         try {
-            rs = data.statement.executeQuery("SELECT * FROM CURRENTPET");
+            rs = data.getStatement().executeQuery("SELECT * FROM CURRENTPET");
             if (rs.next()) {
                 rs = rs;
             }
@@ -212,7 +203,7 @@ public class Pet {
         StringBuilder build = new StringBuilder();
         int id = 0;
         try {
-            ResultSet rs = data.statement.executeQuery("SELECT * FROM PETRECORD");
+            ResultSet rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD");
             while (rs.next()) {
                 id++;
             }
@@ -221,7 +212,7 @@ public class Pet {
         }
         id++;
         try {
-            data.statement.executeUpdate("INSERT INTO PETRECORD VALUES (" + id + ",'" + this.getName()
+            data.getStatement().executeUpdate("INSERT INTO PETRECORD VALUES (" + id + ",'" + this.getName()
                     + "' ," + this.getLevel() + "," + this.getHpMax() + "," + this.getHp() + ","
                     + this.getHappy() + "," + this.getExp() + "," + this.getSatiety() + ","
                     + this.getFoodCount() + "," + this.getBattleCount() + "," + this.getLegendCount() + ",'"

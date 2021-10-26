@@ -16,15 +16,15 @@ import java.sql.Statement;
  */
 public class PetData {
 
-    DBManager dbManager;
-    Connection conn;
-    Statement statement;
+    private DBManager dbManager;
+    private Connection conn;
+    private Statement statement;
 
     public PetData() {
-        dbManager = new DBManager();
-        conn = dbManager.getConnection();
+        this.dbManager = new DBManager();
+        this.conn = dbManager.getConnection();
         try {
-            statement = conn.createStatement();
+            this.statement = conn.createStatement();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -33,11 +33,11 @@ public class PetData {
     public void createPetDatabases() {
         try {
             this.checkExistedTable("PETRECORD");
-            this.statement.executeUpdate("CREATE  TABLE PETRECORD  (NAME   VARCHAR(8),"
+            this.getStatement().executeUpdate("CREATE  TABLE PETRECORD  (NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, FOOD INT, BATTLE INT, LEGEND INT, MESSAGE VARCHAR(200))");
             this.checkExistedTable("CURRENTPET");
-            this.statement.executeUpdate("CREATE  TABLE CURRENTPET  (NAME   VARCHAR(8),"
+            this.getStatement().executeUpdate("CREATE  TABLE CURRENTPET  (NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, CORDYCEPS INT, FOOD INT, BATTLE INT, GAMEOVER BOOLEAN)");
         } catch (SQLException ex) {
@@ -51,7 +51,7 @@ public class PetData {
 
         try {
             current.checkExistedTable("CURRENTPET");
-            current.statement.executeUpdate("CREATE  TABLE CURRENTPET  (NAME   VARCHAR(8),"
+            current.getStatement().executeUpdate("CREATE  TABLE CURRENTPET  (NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, CORDYCEPS INT, FOOD INT, BATTLE INT, GAMEOVER BOOLEAN)");
             /*current.statement.executeUpdate("INSERT INTO CURRENTPET VALUES (" + "'" + pet.getName()
@@ -67,7 +67,7 @@ public class PetData {
 
     public void updateCurrentPet(Pet pet) {
         try {
-            this.statement.executeUpdate("INSERT INTO CURRENTPET VALUES (\" + \"'\" + pet.getName()\n"
+            this.getStatement().executeUpdate("INSERT INTO CURRENTPET VALUES (\" + \"'\" + pet.getName()\n"
                     + "+ \"' ,\" + pet.getLevel() + \",\" + pet.getHpMax() + \",\" + pet.getHp() + \",\"\n"
                     + "+ pet.getHappy() + \",\" + pet.getExp() + \",\" + pet.getSatiety() + \",\"\n"
                     + "+ pet.getCordycepsCount() + \",\" + pet.getFoodCount() + \",\"\n"
@@ -82,7 +82,7 @@ public class PetData {
 
         try {
             record.checkExistedTable("PETRECORD");
-            record.statement.executeUpdate("CREATE  TABLE PETRECORD  (NAME   VARCHAR(8),"
+            record.getStatement().executeUpdate("CREATE  TABLE PETRECORD  (NAME   VARCHAR(8),"
                     + "   LEVEL   INT,   HP_MAX   INT,   HP   INT,   HAPPY INT,   EXP INT,"
                     + " SATIETY INT, FOOD INT, BATTLE INT, LEGEND INT, MESSAGE VARCHAR(200))");
         } catch (SQLException ex) {
@@ -98,16 +98,16 @@ public class PetData {
      */
     public void checkExistedTable(String name) {
         try {
-            DatabaseMetaData dbmd = this.conn.getMetaData();
+            DatabaseMetaData dbmd = this.getConn().getMetaData();
             String[] types = {"TABLE"};
-            statement = this.conn.createStatement();
+            setStatement(this.getConn().createStatement());
             ResultSet rs = dbmd.getTables(null, null, null, types);
 
             while (rs.next()) {
                 String table_name = rs.getString("TABLE_NAME");
                 //System.out.println(table_name);
                 if (table_name.equalsIgnoreCase(name)) {
-                    statement.executeUpdate("Drop table " + name);
+                    getStatement().executeUpdate("Drop table " + name);
                     //System.out.println("Table " + name + " has been deleted.");
                     break;
                 }
@@ -119,6 +119,41 @@ public class PetData {
     }
 
     public void closeConnection() {
-        this.dbManager.closeConnections();
+        this.getDbManager().closeConnections();
+    }
+
+    /**
+     * @return the dbManager
+     */
+    public DBManager getDbManager() {
+        return dbManager;
+    }
+
+    /**
+     * @return the conn
+     */
+    public Connection getConn() {
+        return conn;
+    }
+
+    /**
+     * @param conn the conn to set
+     */
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
+    /**
+     * @return the statement
+     */
+    public Statement getStatement() {
+        return statement;
+    }
+
+    /**
+     * @param statement the statement to set
+     */
+    public void setStatement(Statement statement) {
+        this.statement = statement;
     }
 }
