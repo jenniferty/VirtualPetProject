@@ -1,11 +1,6 @@
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,7 +9,7 @@ import java.util.Scanner;
  */
 /**
  ** Child class of abstract Enemy class. Object is initialised using the
- * strongenemy.txt file.
+ * strongenemy table.
  *
  * @author Jennifer Ty 15903786
  */
@@ -27,7 +22,7 @@ public class StrongEnemy extends Enemy {
      * populate the members of the class.
      */
     public StrongEnemy(Pet pet) {
-        this.pet=pet;
+        this.pet = pet;
         this.happyWin = 8;
         this.satietyWin = -4;
         initialise();
@@ -38,7 +33,7 @@ public class StrongEnemy extends Enemy {
      * in other Enemy child classes.
      */
     @Override
-    protected void initialise() {       
+    protected void initialise() {
         ResultSet initialiseEnemy = this.getEnemyData(getPet().getLevel());
         try {
             this.setName(initialiseEnemy.getString("NAME"));
@@ -57,22 +52,24 @@ public class StrongEnemy extends Enemy {
      * object.
      *
      * @param pet Pet object to modify.
+     * @return string representation to print to jtextpane
      */
-    //@Override
+    @Override
     protected String battle(Pet pet) {
         StringBuilder build = new StringBuilder();
         int hpLoss = (int) ((Math.random() * (getUpper_hp() - getLower_hp()) + getLower_hp()));
-        build.append(pet.updateHp(pet.getHp() - hpLoss)+"\n");
+        build.append(pet.updateHp(pet.getHp() - hpLoss) + "\n");
         if (pet.getHp() == 0) {
             build.append(pet.getName() + " was defeated by " + getName() + ".\n");
         } else {
             build.append(pet.getName() + " has defeated " + getName() + ".\n");
-            build.append(this.getMessage()+"\n");
+            build.append(this.getMessage() + "\n");
             if (this.getIsLegend()) { //new code added
                 pet.setLegendCount(pet.getLegendCount() + 1);
                 build.append("It was a legendary battle.\n");
             }
-            build.append(pet.updateExp(this.getExp_value()) + "\n");
+            build.append(pet.updateExp(pet.getExp() + getExp_value()) + "\n");
+            build.append(pet.updateLevel((pet.getExp() / 100) + 1) + "\n");
             build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()) + "\n");
             build.append(pet.updateSatiety(pet.getSatiety() + this.getSatietyWin()) + "\n");
             pet.setBattleCount(pet.getBattleCount() + 1);

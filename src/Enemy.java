@@ -3,7 +3,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -38,16 +37,8 @@ public abstract class Enemy {
     }
 
     /**
-     * Method to be inherited by the child classes. Used to create an ArrayList
-     * from the contents of a file. Child classes will need to override this
-     * method because they use different files to obtain an ArrayList.
-     *
-     * @return an ArrayList of Strings.
-     */
-    // protected abstract ArrayList getList();
-    /**
      * Method to be inherited by the child classes. Will be called in the
-     * constructor to populate the members of the class.
+     * constructor to populate the members of the class from database.
      */
     protected void initialise() {
         try {
@@ -75,8 +66,9 @@ public abstract class Enemy {
             build.append(pet.getName() + " was defeated by " + getName() + ".\n");
         } else {
             build.append(pet.getName() + " has defeated " + getName() + ".\n");
-            build.append(this.getMessage()+"\n");
-            build.append(pet.updateExp(this.getExp_value()));
+            build.append(this.getMessage() + "\n");
+            build.append(pet.updateExp(pet.getExp() + getExp_value()));
+            build.append(pet.updateLevel((pet.getExp() / 100) + 1));
             build.append(pet.updateHappy(pet.getHappy() + this.getHappyWin()));
             build.append(pet.updateSatiety(pet.getSatiety() + this.getSatietyWin()) + "\n");
             pet.setBattleCount(pet.getBattleCount() + 1);
@@ -85,10 +77,16 @@ public abstract class Enemy {
         return build.toString();
     }
 
+    /**
+     * queries a random row from the weak/average/strong enemy database.
+     *
+     * @param level of Pet object
+     * @return a random row from a database
+     */
     protected ResultSet getEnemyData(int level) {
         Data data = new Data();
         ResultSet rs = null;
-        switch (level) {
+        switch (level) {//selects a different database based on level
             case 1:
             case 2:
                     try {

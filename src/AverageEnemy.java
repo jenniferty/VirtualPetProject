@@ -1,10 +1,3 @@
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,7 +5,7 @@ import java.util.Scanner;
  */
 /**
  * Child class of abstract Enemy class. Object is initialised using the
- * averageenemy.txt file.
+ * averageenemy database.
  *
  * @author Jennifer Ty 15903786
  */

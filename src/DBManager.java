@@ -5,15 +5,13 @@
  */
 
 /**
- * Modified code from Tutorial 8. A class used to establish connection to the
- * database.
- * @author Jenni
+ * Modified code from Tutorial 8. A class used to establish connection to an
+ * embedded database.
+ * @author Jennifer Ty 15903786
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public final class DBManager {
 
@@ -22,15 +20,17 @@ public final class DBManager {
     private static final String URL = "jdbc:derby://localhost:1527/VirtualPetDB";  //url of the DB host
     private Connection conn;
 
+    /**
+     * constructor for DBManager class
+     */
     public DBManager() {
         establishConnection();
     }
 
-    public static void main(String[] args) {
-        DBManager dbManager = new DBManager();
-        System.out.println(dbManager.getConnection());
-    }
-
+    /**
+     * 
+     * @return conn
+     */
     public Connection getConnection() {
         return this.getConn();
     }
@@ -47,6 +47,9 @@ public final class DBManager {
         }       
     }
 
+    /**
+     * to close connection to database
+     */
     public void closeConnections() {
         if (getConn() != null) {
             try {
@@ -54,37 +57,6 @@ public final class DBManager {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
-    }
-
-    public ResultSet queryDB(String sql) {
-
-        Connection connection = this.getConn();
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return resultSet;
-    }
-
-    public void updateDB(String sql) {
-
-        Connection connection = this.getConn();
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(sql);
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
     }
 
@@ -101,5 +73,4 @@ public final class DBManager {
     public void setConn(Connection conn) {
         this.conn = conn;
     }
-
 }

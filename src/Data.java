@@ -5,8 +5,8 @@
  */
 
 /**
- *
- * @author Jenni
+ * Class that creates the databases.
+ * @author Jennifer Ty 15903786
  */
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,6 +20,9 @@ public class Data {
     private Connection conn;
     private Statement statement;
 
+    /**
+     * constructor for Data class
+     */
     public Data() {
         this.dbManager = new DBManager();
         this.conn = dbManager.getConnection();
@@ -30,10 +33,17 @@ public class Data {
         }
     }
     
+    /**
+     * run this to create database
+     * @param args 
+     */
     public static void main(String[] args) {
         createDatabase();
     }
 
+    /**
+     * method that creates the databases
+     */
     public static void createDatabase() {    
         try {
             Data data = new Data();
@@ -85,6 +95,10 @@ public class Data {
         }
     }
     
+    /**
+     * method that updates the currentpet database
+     * @param pet 
+     */
     public void updateCurrentPet(Pet pet) {
         try {
             this.getStatement().executeUpdate("DELETE FROM CURRENTPET WHERE ID=1");
@@ -100,7 +114,7 @@ public class Data {
 
     /**
      * From tutorial 8 solutions.
-     *
+     * checks if database already exists
      * @param name
      */
     public void checkExistedTable(String name) {
@@ -112,10 +126,8 @@ public class Data {
 
             while (rs.next()) {
                 String table_name = rs.getString("TABLE_NAME");
-                //System.out.println(table_name);
                 if (table_name.equalsIgnoreCase(name)) {
                     getStatement().executeUpdate("Drop table " + name);
-                    //System.out.println("Table " + name + " has been deleted.");
                     break;
                 }
             }
@@ -125,6 +137,9 @@ public class Data {
         }
     }
 
+    /**
+     * method to close connection
+     */
     public void closeConnection() {
         this.getDbManager().closeConnections();
     }

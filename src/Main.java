@@ -5,8 +5,8 @@
  */
 
 /**
- *
- * @author Jenni
+ * Main class
+ * @author Jennifer Ty 15903786
  */
 public class Main {
     public static void main(String[] args) {

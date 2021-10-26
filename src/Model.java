@@ -2,7 +2,6 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Observable;
-import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -10,36 +9,42 @@ import java.util.Scanner;
  * and open the template in the editor.
  */
 /**
- *
- * @author Jenni
+ * Model class of mvc.
+ * @author Jennifer Ty 15903786
  */
 public class Model extends Observable {
 
     private Data data;
     private Enemy enemy;
 
+    /**
+     * constructor for model class
+     * @param data the database
+     */
     public Model(Data data) {
         this.data = data;
     }
 
+    /**
+     * method that returns a string representation of petrecord database.
+     * @return last 10 rows of petrecord database as a String
+     */
     public String viewRecord() {
         Data data = new Data();
         ResultSet rs = null;
-        //String record = null;
         StringBuilder build = new StringBuilder();
         try {
             data.getStatement().setMaxRows(10);
             rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD");
             int count = 0;
-            while (rs.next()) {
+            while (rs.next()) {//checks if database is populated
                 count++;
             }
-            if (count == 0) {
+            if (count == 0) {//if empty
                 return "No records exists. Befriend your pet and complete your own journey today!";
-                //System.out.println("No records exists. Befriend your pet and complete your own journey today!");
             }
             rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD ORDER BY ID DESC");
-            while (rs.next()) {
+            while (rs.next()) {//iterates through database building a string representation
                 build.append("Name: " + rs.getString("NAME") + "\n"
                         + "Level: " + rs.getInt("LEVEL") + "\n"
                         + "HP: " + rs.getInt("HP") + "/" + rs.getInt("HP_MAX") + "\n"
@@ -57,6 +62,10 @@ public class Model extends Observable {
         return build.toString();
     }
 
+    /**
+     * instantiate the enemy object then returns a string representation
+     * @return string to set in jtextpane
+     */
     public String battleMenu() {
         StringBuilder build = new StringBuilder();
         Pet pet = new Pet();
@@ -86,6 +95,11 @@ public class Model extends Observable {
         return build.toString();
     }
 
+    /**
+     * Checks string from jcombobox then returns a Food enum.
+     * @param food a string that represents the Food enum
+     * @return Food enum
+     */
     public Food getFood(String food) {
         switch (food) {
             case "Apple":

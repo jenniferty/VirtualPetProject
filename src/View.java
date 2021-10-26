@@ -4,10 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Observable;
@@ -28,40 +24,43 @@ import javax.swing.JTextPane;
  * and open the template in the editor.
  */
 /**
- *
- * @author Jenni
+ * Class that contains the view
+ * @author Jennifer Ty 15903786
  */
 public class View extends JFrame implements Observer {
 
-    private CardLayout card = new CardLayout();
-    private JPanel pagePanel, mainMenuPanel, gameMenuPanel, newGamePanel, recordsMenuPanel, battleMenuPanel, battleMenuPanel2, foodMenuPanel, statsMenuPanel, endMenuPanel;
+    private final CardLayout card = new CardLayout();
+    private final JPanel pagePanel, mainMenuPanel, gameMenuPanel, newGamePanel, recordsMenuPanel, battleMenuPanel, battleMenuPanel2, foodMenuPanel, statsMenuPanel, endMenuPanel;
     private JTextPane outputMain, outputGame, outputNew, outputRecord, outputBattle, outputBattle2, outputFood, outputStat, outputEnd;
-    private JLabel petName = new JLabel("Enter your pet's name (8 char):");
+    private final JLabel petName = new JLabel("Enter your pet's name (8 char):");
     private JTextField nameInput = new JTextField(8);
-    private JButton nameButton = new JButton("OK");
-    private JButton newGameButton = new JButton("New Game");
-    private JButton continueButton = new JButton("Continue");
-    private JButton viewRecordsButton = new JButton("Records");
-    private JButton quitButton = new JButton("Quit");
-    private JButton quitButton2 = new JButton("Quit");
-    private JButton battleButton = new JButton("Battle");
-    private JButton fightButton = new JButton("Fight");
-    private JButton runButton = new JButton("Run");
-    private JButton foodButton = new JButton("Food");
-    private JButton eatButton = new JButton("Eat");
-    private JButton backButton = new JButton("Back");
-    private JButton backButton2 = new JButton("Back");
-    private JButton viewStatsButton = new JButton("Stats");
-    private JButton mainMenuButton = new JButton("Main Menu");
-    private JButton mainMenuButton2 = new JButton("Main Menu");
-    private JButton mainMenuButton3 = new JButton("Main Menu");
-    private JButton tryAgainButton = new JButton("Try Again");
-    private JButton nextButton = new JButton("Next");
-    private JLabel foodLabel = new JLabel("Food:");
+    private final JButton nameButton = new JButton("OK");
+    private final JButton newGameButton = new JButton("New Game");
+    private final JButton continueButton = new JButton("Continue");
+    private final JButton viewRecordsButton = new JButton("Records");
+    private final JButton quitButton = new JButton("Quit");
+    private final JButton quitButton2 = new JButton("Quit");
+    private final JButton battleButton = new JButton("Battle");
+    private final JButton fightButton = new JButton("Fight");
+    private final JButton runButton = new JButton("Run");
+    private final JButton foodButton = new JButton("Food");
+    private final JButton eatButton = new JButton("Eat");
+    private final JButton backButton = new JButton("Back");
+    private final JButton backButton2 = new JButton("Back");
+    private final JButton viewStatsButton = new JButton("Stats");
+    private final JButton mainMenuButton = new JButton("Main Menu");
+    private final JButton mainMenuButton2 = new JButton("Main Menu");
+    private final JButton mainMenuButton3 = new JButton("Main Menu");
+    private final JButton tryAgainButton = new JButton("Try Again");
+    private final JButton nextButton = new JButton("Next");
+    private final JLabel foodLabel = new JLabel("Food:");
     private String[] food = new String[6];
     private JComboBox foodBox = new JComboBox(food);
     private ImageIcon image;
 
+    /**
+     * Constructor for View class. Sets up cards.
+     */
     public View() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(630, 500);
@@ -89,11 +88,14 @@ public class View extends JFrame implements Observer {
         this.card.show(pagePanel, "main");
     }
 
-    public JPanel mainMenu() {
+    /**
+     * main card
+     * @return a JPanel card
+     */
+    public final JPanel mainMenu() {
         JPanel main = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputMain(new JTextPane());
-        String message = this.titleScreen();
         this.setImage(new ImageIcon(new ImageIcon("title.png").getImage().getScaledInstance(600, 350, Image.SCALE_DEFAULT)));
         getOutputMain().insertIcon(getImage());
         getOutputMain().setEditable(false);
@@ -109,7 +111,11 @@ public class View extends JFrame implements Observer {
         return main;
     }
 
-    public JPanel newGame() {
+    /**
+     * new game card
+     * @return a JPanel card
+     */
+    public final JPanel newGame() {
         JPanel newgame = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputNew(new JTextPane());
@@ -126,12 +132,17 @@ public class View extends JFrame implements Observer {
         return newgame;
     }
 
-    public JPanel gameMenu() {
+    /**
+     * game menu card
+     * @return a JPanel card
+     */
+    public final JPanel gameMenu() {
         JPanel start = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputGame(new JTextPane());
         outputPanel.setSize(600, 350);
         getOutputGame().setText("");
+        getOutputGame().setEditable(false);
         getOutputGame().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputGame());
         start.add(outputPanel, BorderLayout.NORTH);
@@ -142,23 +153,32 @@ public class View extends JFrame implements Observer {
         return start;
     }
 
-    public JPanel recordsMenu() {
+    /**
+     * records card
+     * @return a JPanel card
+     */
+    public final JPanel recordsMenu() {
         JPanel records = new JPanel();
         setOutputRecord(new JTextPane());
+        getOutputRecord().setEditable(false);
         JScrollPane outputPanel = new JScrollPane(getOutputRecord());
         outputPanel.setPreferredSize(new Dimension(600, 350));
-        //outputRecord.setPreferredSize(new Dimension(600, 350));
         records.add(outputPanel, BorderLayout.NORTH);
         records.add(getMainMenuButton3());
         return records;
     }
 
-    public JPanel battleMenu() {
+    /**
+     * battle menu card
+     * @return a JPanel card
+     */
+    public final JPanel battleMenu() {
         JPanel battle = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputBattle(new JTextPane());
         outputPanel.setSize(600, 350);
         getOutputBattle().setText("");
+        getOutputBattle().setEditable(false);
         getOutputBattle().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputBattle());
         battle.add(outputPanel, BorderLayout.NORTH);
@@ -167,12 +187,17 @@ public class View extends JFrame implements Observer {
         return battle;
     }
     
-    public JPanel battleMenu2() {
+    /**
+     * second battle menu card
+     * @return a JPanel card
+     */
+    public final JPanel battleMenu2() {
         JPanel battle = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputBattle2(new JTextPane());
         outputPanel.setSize(600, 350);
         getOutputBattle2().setText("");
+        getOutputBattle2().setEditable(false);
         getOutputBattle2().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputBattle2());
         battle.add(outputPanel, BorderLayout.NORTH);
@@ -180,12 +205,17 @@ public class View extends JFrame implements Observer {
         return battle;
     }
 
-    public JPanel foodMenu() {
+    /**
+     * food menu card
+     * @return a JPanel card
+     */
+    public final JPanel foodMenu() {
         JPanel foodPanel = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputFood(new JTextPane());
         outputPanel.setSize(600, 350);
         getOutputFood().setText("");
+        getOutputFood().setEditable(false);
         getOutputFood().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputFood());
         outputPanel.setVisible(true);
@@ -204,12 +234,17 @@ public class View extends JFrame implements Observer {
         return foodPanel;
     }
 
-    public JPanel statsMenu() {
+    /**
+     * current pet stats menu card
+     * @return a JPanel card
+     */
+    public final JPanel statsMenu() {
         JPanel stats = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputStat(new JTextPane());
         outputPanel.setPreferredSize(new Dimension(600, 350));
         getOutputStat().setText("");
+        getOutputStat().setEditable(false);
         getOutputStat().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputStat());
         outputPanel.setVisible(true);
@@ -218,12 +253,17 @@ public class View extends JFrame implements Observer {
         return stats;
     }
 
-    public JPanel endMenu() {
+    /**
+     * end menu card
+     * @return a JPanel card
+     */
+    public final JPanel endMenu() {
         JPanel end = new JPanel();
         JPanel outputPanel = new JPanel();
         setOutputEnd(new JTextPane());
         outputPanel.setPreferredSize(new Dimension(600, 350));
         getOutputEnd().setText("");
+        getOutputEnd().setEditable(false);
         getOutputEnd().setPreferredSize(new Dimension(600, 350));
         outputPanel.add(getOutputEnd());
         outputPanel.setVisible(true);
@@ -233,6 +273,10 @@ public class View extends JFrame implements Observer {
         return end;
     }
 
+    /**
+     * Method that adds actionlisteners to buttons
+     * @param listener 
+     */
     public void addActionListener(ActionListener listener) {
         this.getNewGameButton().addActionListener(listener);
         this.getContinueButton().addActionListener(listener);
@@ -255,25 +299,10 @@ public class View extends JFrame implements Observer {
         this.getNextButton().addActionListener(listener);
     }
 
-    public String titleScreen() {
-        StringBuilder build = new StringBuilder();
-        String line;
-        try { //title screen
-            FileReader fr = new FileReader("title.txt");
-            BufferedReader inputStream = new BufferedReader(fr);
-            while ((line = inputStream.readLine()) != null) {
-                build.append(line);
-                build.append("\n");
-            }
-            inputStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-        } catch (IOException e) {
-            System.out.println("Error reading from file ");
-        }
-        return build.toString();
-    }
-
+    /**
+     * method that validates currentpet table
+     * @return 
+     */
     public Boolean validateSave() {
         Data data = new Data();
         ResultSet rs = null;
@@ -295,6 +324,11 @@ public class View extends JFrame implements Observer {
         return canContinue;
     }
 
+    /**
+     * method to validate resultset
+     * @param rs
+     * @return 
+     */
     public Boolean validateCurrentPet(ResultSet rs) {
         try {
             if (rs.getString("NAME").length() > 8 || rs.getString("NAME").length() < 1) {
@@ -324,15 +358,20 @@ public class View extends JFrame implements Observer {
         return true;
     }
 
+    /**
+     * Overrides update method
+     * @param o
+     * @param arg 
+     */
     @Override
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
         /**
      * @return the card
      */
-    public CardLayout getCard() {
+    public final CardLayout getCard() {
         return card;
     }
 

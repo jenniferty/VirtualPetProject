@@ -55,7 +55,7 @@ public class Pet {
 
     /**
      * Constructor used to create a new Pet object using the values of a
-     * previously used Pet. Values are obtained through the petstats.txt file.
+     * previously used Pet. Values are obtained through the currentpet database.
      * Calls the initialise() method to populate members of the Pet class.
      */
     public Pet() {
@@ -63,7 +63,7 @@ public class Pet {
     }
 
     /**
-     * Saves the pet's values to the petstat.txt file so that the user can
+     * Saves the pet's values to the currentpet database so that the user can
      * continue the game with the same pet.
      */
     public final void update() {
@@ -72,7 +72,8 @@ public class Pet {
     }
 
     /**
-     * Reads and populates members of the Pet object from the petstats.txt file.
+     * Reads and populates members of the Pet object from the currentpet
+     * database.
      */
     public final void initialise() {
         ResultSet rs = null;
@@ -93,16 +94,15 @@ public class Pet {
             setBattleCount(rs.getInt("BATTLE"));
             setFoodCount(rs.getInt("FOOD"));
             setGameOver(false);
-
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     /**
-     * Checks if values in petstats.txt are valid or empty.
+     * Checks if values in currentpet are valid or empty.
      *
-     * @return a Boolean |true if file is valid|false if file is invalid
+     * @return a Boolean |true if all values are valid|false otherwise
      */
     public Boolean canContinue() {
 
@@ -126,6 +126,12 @@ public class Pet {
         return canContinue; //true if gameover false if can continue with pet
     }
 
+    /**
+     * method that validates currentpet table
+     *
+     * @param rs first row of currentpet table
+     * @return true if valid
+     */
     public Boolean validateCurrentPet(ResultSet rs) {
         try {
             if (rs.getString("NAME").length() > 8 || rs.getString("NAME").length() < 1) {
@@ -149,6 +155,9 @@ public class Pet {
             if (rs.getInt("CORDYCEPS") < 0 || rs.getInt("CORDYCEPS") > 2) {
                 return false;
             }
+            if (rs.getBoolean("GAMEOVER") == true) {
+                return false;
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -160,6 +169,7 @@ public class Pet {
      * values of each constant.
      *
      * @param food
+     * @return string representation to print to jtextpane
      */
     public String eat(Food food) {
 
@@ -180,14 +190,12 @@ public class Pet {
                 if (food.equals(Food.CORDYCEPS)) {
                     setCordycepsCount(this.getCordycepsCount() + 1);
                 }
-                if (this.getCordycepsCount() >= 3) {
+                if (this.getCordycepsCount() >= 3) {//ends game if condition met
                     setMessage("\"... must... get... higher...\" " + this.getName() + " has died by eating cordyceps. What a way to go.");
-                    //endGame(getMessage());
                     build.append(getMessage() + "\n");
                 }
-                if (this.getHp() == 0) {
+                if (this.getHp() == 0 && food == Food.MUSHROOM) {//ends game if condition met
                     setMessage("The Beginner's Guide to Identifying Mushrooms doesn't help those who can't see. " + this.getName() + " has died by eating a false morel. Unlucky.");
-                    //endGame(getMessage());
                     build.append(getMessage() + "\n");
                 }
             }
@@ -198,11 +206,19 @@ public class Pet {
         return build.toString();
     }
 
+    /**
+     * method that saves current pet as an entry in petrecord table then returns
+     * a string representation.
+     *
+     * @param message unique message that tells the user how the pet was
+     * terminated
+     * @return a String to print to jtextpane
+     */
     public String endGame(String message) {
         Data data = new Data();
         StringBuilder build = new StringBuilder();
         int id = 0;
-        try {
+        try {//increments id for id column
             ResultSet rs = data.getStatement().executeQuery("SELECT * FROM PETRECORD");
             while (rs.next()) {
                 id++;
@@ -211,7 +227,7 @@ public class Pet {
             System.out.println(ex.getMessage());
         }
         id++;
-        try {
+        try {//insert into petrecord table
             data.getStatement().executeUpdate("INSERT INTO PETRECORD VALUES (" + id + ",'" + this.getName()
                     + "' ," + this.getLevel() + "," + this.getHpMax() + "," + this.getHp() + ","
                     + this.getHappy() + "," + this.getExp() + "," + this.getSatiety() + ","
@@ -221,7 +237,6 @@ public class Pet {
             System.out.println(ex.getMessage());
         }
         build.append(message + "\n");
-
         build.append("Final stats:\n");
         build.append(this.toString() + "\n");
         this.setGameOver(true);
@@ -297,6 +312,7 @@ public class Pet {
      * member.
      *
      * @param level value to check
+     * @return
      */
     public String isLevelChange(int level) {
         if (level > this.level) {//prints message when level changes
@@ -310,6 +326,7 @@ public class Pet {
      * to the assigned value.
      *
      * @param level
+     * @return string representation to print to jtextpane
      */
     public String updateLevel(int level) {
         String str = isLevelChange(level);
@@ -350,6 +367,7 @@ public class Pet {
      * member.
      *
      * @param hp value to campare
+     * @return string representation to print to jtextpane
      */
     public String isHpChange(int hp) {
         if ((hp - this.getHp()) > 0) { //Compare current and new values, prints a message if true
@@ -361,11 +379,12 @@ public class Pet {
     }
 
     /**
-     * Method that checks if parameter is out of bounds, then corrects it.
-     * Bundles the set method and the method that checks if parameter is
+     * Method that checks if parameter is out of bounds, then corrects
+     * it.Bundles the set method and the method that checks if parameter is
      * different from the value assigned to the hp member.
      *
      * @param hp new value
+     * @return string representation to print to jtextpane
      */
     public String updateHp(int hp) {
         if (hp > this.getHpMax()) { //prevents values from going out of bounds.
@@ -404,6 +423,7 @@ public class Pet {
      * member.
      *
      * @param happy value to check
+     * @return string representation to print to jtextpane
      */
     public String isHappyChange(int happy) {
 
@@ -420,11 +440,12 @@ public class Pet {
     }
 
     /**
-     * Method that checks if parameter is out of bounds, then corrects it.
-     * Bundles the set method and the method that checks if parameter is
+     * Method that checks if parameter is out of bounds, then corrects
+     * it.Bundles the set method and the method that checks if parameter is
      * different from the value assigned to the happy member.
      *
      * @param happy new value
+     * @return string representation to print to jtextpane
      */
     public String updateHappy(int happy) {
         if (happy > this.getHappyMax()) { //Prevents parameters from going out of bounds.
@@ -440,19 +461,21 @@ public class Pet {
 
     /**
      * Method to implicitly update the user on the pet's current happiness after
-     * a change. Prints out key phrases.
+     * a change.Prints out key phrases.
+     *
+     * @return string representation to print to jtextpane
      */
     public String isHappy() {
         if (this.getHappy() == 0) {
-            return this.getName() + " has sunk into the depths of despair.";
+            return this.getName() + " has sunk into the depths of despair.\n";
         } else if (this.getHappy() < 25) {
-            return this.getName() + " is in a bad mood.";
+            return this.getName() + " is in a bad mood.\n";
         } else if (this.getHappy() >= 25 && this.getHappy() < 50) {
-            return this.getName() + " is feeling down.";
+            return this.getName() + " is feeling down.\n";
         } else if (this.getHappy() > 80 && this.getHappy() < 95) {
-            return this.getName() + " is super happy.";
+            return this.getName() + " is super happy.\n";
         } else if (this.getHappy() >= 95) {
-            return this.getName() + " is over the moon.";
+            return this.getName() + " is over the moon.\n";
         }
         return "";
     }
@@ -483,6 +506,7 @@ public class Pet {
      * exp member with the new value
      *
      * @param exp new value
+     * @return string representation to print to jtextpane
      */
     public String updateExp(int exp) {
         if (exp > this.getExpMax()) { //prevents value from going over the maximum
@@ -522,24 +546,24 @@ public class Pet {
      * satiety member.
      *
      * @param satiety
+     * @return string representation to print to jtextpane
      */
     public String isSatietyChange(int satiety) {
         if ((satiety - this.getSatiety()) > 0) { //Compares current and new values, then prints a message
             return this.getName() + " has gained " + (satiety - this.satiety) + " points in satiety.\n";
-            //isHungry();
         } else if ((satiety - this.satiety) < 0) {
             return this.getName() + " has lost " + (this.satiety - satiety) + " points in satiety.\n";
-            //isHungry();
         }
         return "";
     }
 
     /**
-     * Method that checks if parameter is out of bounds, then corrects it.
-     * Bundles the set method and the method that checks if parameter is
+     * Method that checks if parameter is out of bounds, then corrects
+     * it.Bundles the set method and the method that checks if parameter is
      * different from the value assigned to the satiety member.
      *
      * @param satiety new value
+     * @return string representation to print to jtextpane
      */
     public String updateSatiety(int satiety) {
         if (satiety > this.getSatietyMax()) { //Prevents the parameters from going out of bounds.
@@ -555,7 +579,9 @@ public class Pet {
 
     /**
      * Method to implicitly update the user on the pet's current satiety after a
-     * change. Prints out key phrases.
+     * change.Prints out key phrases.
+     *
+     * @return string representation to print to jtextpane
      */
     public String isHungry() {
         if (this.getSatiety() == 0) {
